@@ -6,3 +6,5 @@
 !/var/log/.gitkeep
 /var/cache/**
 !/var/cache/.gitkeep
+/public/gpx/*.gpx
+/public/map/*.png

@@ -1,13 +1,17 @@
 app.env: dev
 
-db.host: 127.0.0.1
-db.name: krisi_bike
-db.username: root
-db.password: root
+db.host:
+db.name:
+db.username:
+db.password:
 db.port:
+db.encoding: utf8
 
 mail.host:
 mail.username:
 mail.password:
 mail.secure:
 mail.port:
+
+storage.gpx:
+storage.map:

@@ -1,0 +1,58 @@
+html, body {
+    background: #f7f6fb;
+}
+
+.navbar-custom {
+    background: #fff;
+}
+
+.logo {
+    width: 60%;
+}
+
+.card-custom {
+    border: none;
+}
+
+.card-header-custom, .list-group-custom, .card-body-custom {
+    background: white !important;
+}
+
+.card-header-custom {
+    border: none;
+}
+
+.badge-custom {
+    font-size: .8rem;
+}
+
+.list-group-custom li {
+    border: none;
+}
+
+.card-footer-custom {
+    background: #fff;
+    border: none;
+}
+
+.stats div {
+    border-right: 1px solid lightgray;
+    text-align: center;
+}
+
+.stats div:last-child {
+    border-right: none;
+}
+
+.stats p {
+    margin-bottom: 0;
+}
+
+.stats span {
+    font-weight: bold;
+}
+
+.title-link {
+    text-decoration: none;
+    color: black;
+}

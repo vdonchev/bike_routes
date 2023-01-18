@@ -2,20 +2,109 @@
 
 {% block body %}
 
-    <div class="col-lg-8 mx-auto p-3 py-md-5">
-        <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-            <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-bicycle"
-                     viewBox="0 0 16 16">
-                    <path d="M4 4.5a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1v.5h4.14l.386-1.158A.5.5 0 0 1 11 4h1a.5.5 0 0 1 0 1h-.64l-.311.935.807 1.29a3 3 0 1 1-.848.53l-.508-.812-2.076 3.322A.5.5 0 0 1 8 10.5H5.959a3 3 0 1 1-1.815-3.274L5 5.856V5h-.5a.5.5 0 0 1-.5-.5zm1.5 2.443-.508.814c.5.444.85 1.054.967 1.743h1.139L5.5 6.943zM8 9.057 9.598 6.5H6.402L8 9.057zM4.937 9.5a1.997 1.997 0 0 0-.487-.877l-.548.877h1.035zM3.603 8.092A2 2 0 1 0 4.937 10.5H3a.5.5 0 0 1-.424-.765l1.027-1.643zm7.947.53a2 2 0 1 0 .848-.53l1.026 1.643a.5.5 0 1 1-.848.53L11.55 8.623z"/>
-                </svg>
-            </a>
-        </header>
+    {% include '_nav.html.twig' %}
 
-        <main>
-            <h1>Hello World :)</h1>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-light" role="alert">
+                    Total routes: <b>{{ routes|length }}</b>
+                </div>
 
-        </main>
+
+                <div class="row">
+
+                    {% for route in routes %}
+                        <div class="col-md-6 col-12 col-xl-3 col-lg-4">
+                            <div class="card mb-3 card-custom shadow-sm">
+
+                                <!--Map-->
+                                {% if route.mapUrl is not null %}
+                                    <a href="/route/{{ route.id }}" class="title-link">
+                                        <img src="/map/{{ route.mapUrl }}" alt="" class="card-img-top">
+                                    </a>
+                                {% endif %}
+
+                                <!--Title-->
+                                <h5 class="card-header card-header-custom">
+                                    <a href="/route/{{ route.id }}" class="title-link">{{ route.name }}</a>
+                                    {% if route.isNew == true %}
+                                        <span class="badge text-bg-success fa-pull-right small badge-custom">New!</span>
+                                    {% endif %}
+                                </h5>
+
+                                <!--Details-->
+                                <div class="card-body card-body-custom">
+
+                                    <div class="row stats">
+
+                                        <div class="col-4">
+                                            <p class="text-muted small">Distance</p>
+                                            <span>{{ route.length }} km</span>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <p class="text-muted small">Elev Gain</p>
+                                            <span>{{ route.ascent }} m</span>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="progress" role="progressbar" aria-label="Basic example"
+                                                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                                 style="height: 3px">
+                                                <div class="progress-bar {{ route.getDifficultyClass }}"
+                                                     style="width: {{ route.difficulty }}0%"></div>
+                                            </div>
+                                            <p class="text-muted small">Difficulty</p>
+                                            <span>{{ route.difficulty }}/10</span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!--Notes-->
+                                {% if route.note is not null %}
+                                    <div class="card-body card-body-custom small">
+                                        <p class="card-text text-secondary"><i
+                                                    class="fa-solid fa-circle-info"></i> {{ route.note }}</p>
+
+                                    </div>
+                                {% endif %}
+
+                                <!--Buttons-->
+                                <div class="card-footer card-footer-custom">
+
+                                    <a class="btn btn-sm btn-primary"
+                                       href="{{ route.gpxUrl }}"
+                                       target="_blank">
+                                        <i class="fa-solid fa-link"></i> Open .GPX in Garmin
+                                    </a>
+
+                                    {% if route.gpxFileName is not null %}
+                                        <a class="btn btn-sm btn-outline-dark"
+                                           href="/gpx/{{ route.gpxFileName }}"
+                                           target="_blank">
+                                            <i class="fa-solid fa-circle-down"></i> .GPX
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-3 text-right">
+        <div class="text-muted small text-right alert alert-light opacity-75">
+            Developed by <b>mrd</b> &copy;2023 {% if "now"|date("Y") != 2023 %}- {{ "now"|date("Y") }}{% endif %}
+            <br>
+            Last Route update: {{ last_update }}
+            <br>
+            App Version: 1.0.0
+        </div>
     </div>
 
 {% endblock %}
