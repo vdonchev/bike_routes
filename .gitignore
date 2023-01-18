@@ -8,3 +8,4 @@
 !/var/cache/.gitkeep
 /public/gpx/*.gpx
 /public/map/*.png
+deploy.php
