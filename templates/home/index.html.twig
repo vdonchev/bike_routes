@@ -25,12 +25,13 @@
                                     </a>
                                 {% endif %}
 
+                                {% if route.isNew == true %}
+                                    <span class="badge text-bg-success fa-pull-right small badge-custom">New!</span>
+                                {% endif %}
+
                                 <!--Title-->
                                 <h5 class="card-header card-header-custom">
                                     <a href="/route/{{ route.id }}" class="title-link">{{ route.name }}</a>
-                                    {% if route.isNew == true %}
-                                        <span class="badge text-bg-success fa-pull-right small badge-custom">New!</span>
-                                    {% endif %}
                                 </h5>
 
                                 <!--Details-->
