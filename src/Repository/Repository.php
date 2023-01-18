@@ -25,4 +25,9 @@ class Repository
     {
         return $this->db->query('SELECT * FROM route r WHERE r.id = %i', $id);
     }
+
+    public function getUserPerUsername(string $username): ?array
+    {
+        return $this->db->queryFirstRow('SELECT * FROM user u WHERE u.username = %s', $username);
+    }
 }

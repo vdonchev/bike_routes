@@ -3,6 +3,8 @@
 use DI\Container;
 use Psr\Log\LoggerInterface;
 
+session_start();
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $settings = require_once dirname(__DIR__) . '/bootstrap/settings.php';

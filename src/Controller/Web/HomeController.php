@@ -6,6 +6,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Donchev\Framework\Model\Route;
 use Donchev\Framework\Repository\Repository;
+use Donchev\Framework\Security\Authenticator;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Twig\Error\LoaderError;
@@ -22,8 +23,10 @@ class HomeController extends BaseController
      * @throws SyntaxError
      * @throws Exception
      */
-    public function index(Repository $repository, LoggerInterface $logger)
+    public function index(Repository $repository, LoggerInterface $logger, Authenticator $authenticator)
     {
+        $user = $authenticator->getCurrentUser();
+
         $routesData = $repository->getAllRoutes();
 
         $routes = [];
@@ -35,6 +38,7 @@ class HomeController extends BaseController
 
         $logger->info($_SERVER['REMOTE_ADDR']);
 
-        $this->renderTemplate('home/index.html.twig', ['routes' => $routes, 'last_update' => $lastUpdate]);
+        $this->renderTemplate('home/index.html.twig',
+            ['routes' => $routes, 'last_update' => $lastUpdate, 'user' => $user]);
     }
 }

@@ -81,4 +81,10 @@ abstract class BaseController
 
         return $this->template;
     }
+
+    public function redirect(string $url)
+    {
+        header("Location: {$url}");
+        exit();
+    }
 }

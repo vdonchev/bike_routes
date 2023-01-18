@@ -15,7 +15,7 @@ html, body {
 }
 
 .card-header-custom, .list-group-custom, .card-body-custom {
-    background: white !important;
+    background: #fff !important;
 }
 
 .card-header-custom {
@@ -56,6 +56,6 @@ html, body {
 }
 
 .title-link {
-    text-decoration: none;
-    color: black;
+    text-decoration: none !important;
+    color: #000 !important;
 }
