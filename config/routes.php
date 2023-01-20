@@ -10,4 +10,7 @@ return [
     ['GET', '/login', [SecurityController::class, 'login']],
     ['POST', '/login', [SecurityController::class, 'doLogin']],
     ['GET', '/logout', [SecurityController::class, 'logout']],
+    ['GET', '/profile', [SecurityController::class, 'profile']],
+    ['GET', '/password', [SecurityController::class, 'password']],
+    ['POST', '/password', [SecurityController::class, 'passwordUpdate']],
 ];

@@ -57,6 +57,34 @@ class Authenticator
         return null;
     }
 
+    public function passwordUpdate(
+        string $currentPassword,
+        string $newPassword,
+        string $newPasswordRepeat,
+        User $user
+    ): bool {
+        $currentPassword = $this->sanitize($currentPassword);
+        $newPassword = $this->sanitize($newPassword);
+        $newPasswordRepeat = $this->sanitize($newPasswordRepeat);
+
+        if ($newPassword != $newPasswordRepeat) {
+            return false;
+        }
+
+        if (!preg_match("/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/", $newPassword)) {
+            return false;
+        }
+
+        if (!password_verify($currentPassword, $user->getPasswordHash())) {
+            return false;
+        }
+
+        $this->repository->updateUserPassword($user->getId(), password_hash($newPassword, PASSWORD_DEFAULT));
+        $this->logout();
+
+        return true;
+    }
+
     private function sanitize(string $data): string
     {
         return trim($data);

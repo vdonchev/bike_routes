@@ -30,4 +30,9 @@ class Repository
     {
         return $this->db->queryFirstRow('SELECT * FROM user u WHERE u.username = %s', $username);
     }
+
+    public function updateUserPassword(int $userId, string $newPasswordHash)
+    {
+        $this->db->update('user', ['password' => $newPasswordHash], 'id=%i', $userId);
+    }
 }
