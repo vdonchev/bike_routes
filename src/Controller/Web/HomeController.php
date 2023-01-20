@@ -34,7 +34,7 @@ class HomeController extends BaseController
             $routes[] = new Route($route);
         }
 
-        $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('Y/m/d H:i:s') : 'No updates yet';
+        $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('d/M/Y H:i:s') : 'No updates yet';
 
         $logger->info($_SERVER['REMOTE_ADDR']);
 
