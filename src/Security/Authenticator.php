@@ -13,6 +13,9 @@ class Authenticator
      */
     private $repository;
 
+    /**
+     * @param Repository $repository
+     */
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;
@@ -43,11 +46,17 @@ class Authenticator
         return false;
     }
 
+    /**
+     * @return void
+     */
     public function logout()
     {
         session_destroy();
     }
 
+    /**
+     * @return User|null
+     */
     public function getCurrentUser(): ?User
     {
         if (isset($_SESSION)) {
@@ -57,6 +66,13 @@ class Authenticator
         return null;
     }
 
+    /**
+     * @param string $currentPassword
+     * @param string $newPassword
+     * @param string $newPasswordRepeat
+     * @param User $user
+     * @return bool
+     */
     public function passwordUpdate(
         string $currentPassword,
         string $newPassword,
@@ -85,6 +101,10 @@ class Authenticator
         return true;
     }
 
+    /**
+     * @param string $data
+     * @return string
+     */
     private function sanitize(string $data): string
     {
         return trim($data);

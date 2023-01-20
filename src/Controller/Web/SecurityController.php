@@ -109,6 +109,9 @@ class SecurityController extends BaseController
         $this->renderTemplate('security/password.html.twig', ['user' => $user]);
     }
 
+    /**
+     * @return void
+     */
     public function passwordUpdate()
     {
         if (!$user = $this->currentUserExists()) {
