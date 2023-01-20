@@ -27,6 +27,10 @@ return function (array $settings) {
                 dirname(__DIR__) . '/var/log/application.log'
             ),
 
+            'logger.for.visits' => DI\create(FileLogger::class)->constructor(
+                dirname(__DIR__) . '/public/access.log'
+            ),
+
             Environment::class => DI\factory(function (ContainerInterface $container) {
                 $loader = new Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/templates');
 

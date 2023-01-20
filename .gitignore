@@ -7,5 +7,6 @@
 /var/cache/**
 !/var/cache/.gitkeep
 /public/gpx/*.gpx
+/public/access.log
 /public/map/*.png
 deploy.php

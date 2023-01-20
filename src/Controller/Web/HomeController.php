@@ -2,6 +2,7 @@
 
 namespace Donchev\Framework\Controller\Web;
 
+use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Donchev\Framework\Model\Route;
@@ -23,8 +24,12 @@ class HomeController extends BaseController
      * @throws SyntaxError
      * @throws Exception
      */
-    public function index(Repository $repository, LoggerInterface $logger, Authenticator $authenticator)
-    {
+    public function index(
+        Repository $repository,
+        Authenticator $authenticator,
+        Container $container
+    ) {
+
         $user = $authenticator->getCurrentUser();
 
         $routesData = $repository->getAllRoutes();
@@ -36,6 +41,8 @@ class HomeController extends BaseController
 
         $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('d/M/Y H:i:s') : 'No updates yet';
 
+        /** @var LoggerInterface $log */
+        $logger = $container->get('logger.for.visits');
         $logger->info($_SERVER['REMOTE_ADDR']);
 
         $this->renderTemplate('home/index.html.twig',
