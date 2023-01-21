@@ -27,7 +27,7 @@ class ImageUploadService
                 $handle->process(
                     dirname(__DIR__, 2)
                     . DIRECTORY_SEPARATOR . 'public'
-                    . DIRECTORY_SEPARATOR . 'gallery'
+                    . DIRECTORY_SEPARATOR . 'media'
                 );
 
                 if ($handle->processed) {
