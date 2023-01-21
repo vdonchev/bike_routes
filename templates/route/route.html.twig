@@ -15,7 +15,26 @@
                         <h5 class="card-header card-header-custom">Галерия</h5>
 
                         <div class="card-body">
-                            <button class="btn btn-info btn-sm"><i class="fa-solid fa-images"></i> Качи снимки</button>
+
+                            <form enctype="multipart/form-data" method="post" action="/upload-image">
+                                <div class="mb-3">
+                                    <label for="image_field" class="form-label">Качи снимки</label>
+                                    <input type="hidden" name="route_id" value="{{ route.id }}">
+                                    <input class="form-control" type="file" size="32" name="image_field[]" value=""
+                                           multiple accept="image/png, image/gif, image/jpeg" required>
+                                </div>
+
+                                <button class="btn btn-info "><i class="fa-solid fa-images"></i> Качи</button>
+                            </form>
+
+                        </div>
+
+                        <div class="card-body">
+                            {% for file in media %}
+                                <img src="/gallery/{{ file['file'] }}" class="img-fluid" alt="Responsive image">
+                                <br>
+                                <br>
+                            {% endfor %}
                         </div>
 
                     </div>

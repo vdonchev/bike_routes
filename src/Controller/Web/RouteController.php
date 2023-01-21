@@ -34,7 +34,8 @@ class RouteController extends BaseController
 
         $route = new Route($route);
         $user = $authenticator->getCurrentUser();
+        $media = $repository->getMedia($route->getId());
 
-        $this->renderTemplate('/route/route.html.twig', ['route' => $route, 'user' => $user]);
+        $this->renderTemplate('/route/route.html.twig', ['route' => $route, 'user' => $user, 'media' => $media]);
     }
 }

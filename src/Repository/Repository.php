@@ -54,4 +54,18 @@ class Repository
     {
         $this->db->update('user', ['password' => $newPasswordHash], 'id=%i', $userId);
     }
+
+    public function addMedia(string $file, int $userId, int $routeId)
+    {
+        $this->db->insert('media', [
+            'file' => $file,
+            'user_id' => $userId,
+            'route_id' => $routeId,
+        ]);
+    }
+
+    public function getMedia(int $routeId): ?array
+    {
+        return $this->db->query('SELECT * FROM media m WHERE m.route_id = %i ORDER BY m.created_at DESC', $routeId);
+    }
 }
