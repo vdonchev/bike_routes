@@ -21,6 +21,8 @@ class DownloadController extends BaseController
         $route = new Route($route);
 
         $sf = new sendfile();
+        $sf->contentType('application/gpx+xml');
+
         $file = dirname(__DIR__, 3)
             . DIRECTORY_SEPARATOR . 'public'
             . DIRECTORY_SEPARATOR . 'gpx'
