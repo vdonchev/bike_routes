@@ -17,4 +17,5 @@ return [
     ['POST', '/password', [SecurityController::class, 'passwordUpdate']],
     ['GET', '/download-gpx/{id:\d+}', [DownloadController::class, 'gpx']],
     ['POST', '/upload-image', [MediaController::class, 'uploadImage']],
+    ['GET', '/media/delete/{mediaId:\d+}/{routeId:\d+}', [MediaController::class, 'deleteMedia']],
 ];

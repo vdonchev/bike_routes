@@ -64,8 +64,24 @@ class Repository
         ]);
     }
 
-    public function getMedia(int $routeId): ?array
+    public function getMediaPerRouteId(int $routeId): ?array
     {
-        return $this->db->query('SELECT * FROM media m WHERE m.route_id = %i ORDER BY m.created_at DESC', $routeId);
+        return $this->db->query(
+            'SELECT m.*, u.name FROM media m JOIN user u ON m.user_id = u.id WHERE m.route_id = %i ORDER BY m.created_at DESC'
+            , $routeId
+        );
+    }
+
+    public function getMediaRowPerId(int $mediaId): ?array
+    {
+        return $this->db->queryFirstRow(
+            'SELECT * FROM media m WHERE m.id = %i'
+            , $mediaId
+        );
+    }
+
+    public function deleteMedia(int $mediaId, int $authorId): bool
+    {
+        return $this->db->query("DELETE FROM media WHERE id=%i AND user_id=%i", $mediaId, $authorId);
     }
 }

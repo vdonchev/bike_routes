@@ -31,13 +31,7 @@
 
                         </div>
 
-                        <div class="card-body">
-                            {% for file in media %}
-                                <img src="/media/{{ file['file'] }}" class="img-fluid" alt="Responsive image">
-                                <br>
-                                <br>
-                            {% endfor %}
-                        </div>
+                        {% include '_media.html.twig' with {'media': media} %}
 
                     </div>
 

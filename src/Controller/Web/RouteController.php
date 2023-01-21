@@ -19,10 +19,11 @@ class RouteController extends BaseController
      * @param int $id
      * @param Repository $repository
      * @param Authenticator $authenticator
+     * @param NotificationService $notificationService
      * @return void
      * @throws DependencyException
-     * @throws NotFoundException
      * @throws LoaderError
+     * @throws NotFoundException
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws Exception
@@ -39,7 +40,7 @@ class RouteController extends BaseController
 
         $route = new Route($route);
         $user = $authenticator->getCurrentUser();
-        $media = $repository->getMedia($route->getId());
+        $media = $repository->getMediaPerRouteId($route->getId());
         $notifications = $notificationService->getNotifications();
 
         $this->renderTemplate('/route/route.html.twig',
