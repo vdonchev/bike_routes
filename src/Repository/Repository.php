@@ -33,7 +33,7 @@ class Repository
      */
     public function getRoutePerId(int $id): ?array
     {
-        return $this->db->query('SELECT * FROM route r WHERE r.id = %i', $id);
+        return $this->db->queryFirstRow('SELECT * FROM route r WHERE r.id = %i', $id);
     }
 
     /**

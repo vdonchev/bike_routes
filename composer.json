@@ -25,6 +25,7 @@
     "nette/mail": "^3.1",
     "sergeytsalkov/meekrodb": "^2.4",
     "symfony/console": "^5.3",
-    "ext-json": "*"
+    "ext-json": "*",
+    "diversen/http-send-file": "^2.0"
   }
 }

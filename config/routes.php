@@ -1,5 +1,6 @@
 <?php
 
+use Donchev\Framework\Controller\Web\DownloadController;
 use Donchev\Framework\Controller\Web\HomeController;
 use Donchev\Framework\Controller\Web\RouteController;
 use Donchev\Framework\Controller\Web\SecurityController;
@@ -13,4 +14,5 @@ return [
     ['GET', '/profile', [SecurityController::class, 'profile']],
     ['GET', '/password', [SecurityController::class, 'password']],
     ['POST', '/password', [SecurityController::class, 'passwordUpdate']],
+    ['GET', '/download-gpx/{id:\d+}', [DownloadController::class, 'gpx']],
 ];

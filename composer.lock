@@ -4,8 +4,60 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "564e88dcfec26ab3821f1884334541e4",
+    "content-hash": "0cf0c8159976e2ed0e2fa43322bf0bae",
     "packages": [
+        {
+            "name": "diversen/http-send-file",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/diversen/http-send-file.git",
+                "reference": "db37abd40e105c8a1c09d95577153b25ce93d2ca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/diversen/http-send-file/zipball/db37abd40e105c8a1c09d95577153b25ce93d2ca",
+                "reference": "db37abd40e105c8a1c09d95577153b25ce93d2ca",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "diversen\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dennis Iversen",
+                    "email": "dennis.iversen@gmail.com",
+                    "homepage": "http://www.coscms.org/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Sends a file to a client, with support for (multiple) range requests. It is also able to throttle the download.",
+            "homepage": "http://github.com/diversen/http-send-file",
+            "keywords": [
+                "download",
+                "file",
+                "http",
+                "resume",
+                "throttle"
+            ],
+            "support": {
+                "issues": "https://github.com/diversen/http-send-file/issues",
+                "source": "https://github.com/diversen/http-send-file/tree/master"
+            },
+            "time": "2017-09-13T18:04:43+00:00"
+        },
         {
             "name": "doctrine/annotations",
             "version": "1.14.2",
