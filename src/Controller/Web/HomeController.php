@@ -8,6 +8,7 @@ use DI\NotFoundException;
 use Donchev\Framework\Model\Route;
 use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Security\Authenticator;
+use Donchev\Framework\Service\NotificationService;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Twig\Error\LoaderError;
@@ -27,7 +28,8 @@ class HomeController extends BaseController
     public function index(
         Repository $repository,
         Authenticator $authenticator,
-        Container $container
+        Container $container,
+        NotificationService $notificationService
     ) {
 
         $user = $authenticator->getCurrentUser();
@@ -45,7 +47,14 @@ class HomeController extends BaseController
         $logger = $container->get('logger.for.visits');
         $logger->info($_SERVER['REMOTE_ADDR']);
 
+        $notifications = $notificationService->getNotifications();
+
         $this->renderTemplate('home/index.html.twig',
-            ['routes' => $routes, 'last_update' => $lastUpdate, 'user' => $user]);
+            [
+                'routes' => $routes,
+                'last_update' => $lastUpdate,
+                'user' => $user,
+                'notifications' => $notifications
+            ]);
     }
 }

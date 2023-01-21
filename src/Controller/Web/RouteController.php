@@ -7,6 +7,7 @@ use DI\NotFoundException;
 use Donchev\Framework\Model\Route;
 use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Security\Authenticator;
+use Donchev\Framework\Service\NotificationService;
 use Exception;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -26,8 +27,12 @@ class RouteController extends BaseController
      * @throws SyntaxError
      * @throws Exception
      */
-    public function route(int $id, Repository $repository, Authenticator $authenticator)
-    {
+    public function route(
+        int $id,
+        Repository $repository,
+        Authenticator $authenticator,
+        NotificationService $notificationService
+    ) {
         if (!$route = $repository->getRoutePerId($id)) {
             $this->redirect('/');
         }
@@ -35,7 +40,9 @@ class RouteController extends BaseController
         $route = new Route($route);
         $user = $authenticator->getCurrentUser();
         $media = $repository->getMedia($route->getId());
+        $notifications = $notificationService->getNotifications();
 
-        $this->renderTemplate('/route/route.html.twig', ['route' => $route, 'user' => $user, 'media' => $media]);
+        $this->renderTemplate('/route/route.html.twig',
+            ['route' => $route, 'user' => $user, 'media' => $media, 'notifications' => $notifications]);
     }
 }

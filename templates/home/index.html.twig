@@ -3,6 +3,8 @@
 {% block body %}
     {% include '_nav.html.twig' with {'user': user} %}
 
+    {% include '_notifications.html.twig' with {'notifications': notifications} %}
+
     <div class="container mt-3">
         <div class="row">
             <div class="col-12">
