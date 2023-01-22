@@ -17,13 +17,18 @@
                         <span class="nav-link">Здравей, <b>{{ user.name }}</b>! 😀</span>
                     </li>
                 {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Начало</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Начало</a>
+                </li>
                 {% if user %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/profile">Профил</a>
                     </li>
+                    {% if user.isAdmin() %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/route/add"><b>Добави Трасе</b></a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/logout">Изход</a>
                     </li>

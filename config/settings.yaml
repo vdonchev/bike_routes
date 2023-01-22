@@ -13,5 +13,6 @@ mail.password:
 mail.secure:
 mail.port:
 
-storage.gpx:
-storage.map:
+media.path:
+media.gpx.path:
+media.map.path:

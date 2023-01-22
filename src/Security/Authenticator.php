@@ -109,4 +109,13 @@ class Authenticator
     {
         return trim($data);
     }
+
+    public function isAdmin(): bool
+    {
+        if ($user = $this->getCurrentUser()) {
+            return $user->getId() === 1;
+        }
+
+        return false;
+    }
 }

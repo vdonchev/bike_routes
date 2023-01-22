@@ -96,4 +96,9 @@ class User
     {
         $this->updatedAt = $updatedAt;
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->getId() === 1;
+    }
 }

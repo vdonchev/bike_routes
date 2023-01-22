@@ -2,8 +2,15 @@
 
 namespace Donchev\Framework\Controller\Web;
 
+use DI\Container;
+use DI\DependencyException;
+use DI\NotFoundException;
+use diversen\sendfile;
+use Donchev\Framework\Model\Route;
+use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Security\Authenticator;
 use Donchev\Framework\Service\MediaService;
+use Exception;
 
 class MediaController extends NotificationAwareController
 {
@@ -33,5 +40,38 @@ class MediaController extends NotificationAwareController
         }
 
         $this->redirect('/route/' . $routeId);
+    }
+
+    /**
+     * @param int $id
+     * @param Repository $repository
+     * @param Container $container
+     * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws Exception
+     */
+    public function downloadGpx(int $id, Repository $repository, Container $container)
+    {
+        $route = $repository->getRoutePerId($id);
+        $route = new Route($route);
+
+        $sf = new sendfile();
+        $sf->contentType('application/gpx+xml');
+
+        $file = $container->get('app.settings')['media.gpx.path'] . DIRECTORY_SEPARATOR . $route->getGpxFileName();
+
+        $sf->send($file);
+    }
+
+    public function uploadRoute(Authenticator $authenticator)
+    {
+        if (!$authenticator->isAdmin()) {
+            $this->redirect('/');
+        }
+
+        $user = $authenticator->getCurrentUser();
+
+        $this->renderTemplate('/route/add.html.twig', ['user' => $user]);
     }
 }
