@@ -59,3 +59,7 @@ html, body {
     text-decoration: none !important;
     color: #000 !important;
 }
+
+.img-pinch {
+    touch-action: pan-y pinch-zoom !important;
+}

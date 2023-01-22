@@ -1,19 +1,18 @@
 {% if notifications is not empty %}
 
-    <div class="container mt-3">
         <div class="row">
             <div class="col-12">
 
                 {% for name, notificationGroup in notifications %}
                     {% for notification in notificationGroup %}
-                        <div class="alert alert-{{ name }}" role="alert">
+                        <div class="alert alert-dismissible fade show alert-{{ name }}" role="alert">
                             {{ notification }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     {% endfor %}
                 {% endfor %}
 
             </div>
         </div>
-    </div>
 
 {% endif %}

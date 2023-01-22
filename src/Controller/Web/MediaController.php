@@ -2,7 +2,6 @@
 
 namespace Donchev\Framework\Controller\Web;
 
-use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Security\Authenticator;
 use Donchev\Framework\Service\MediaService;
 use Donchev\Framework\Service\NotificationService;
@@ -22,24 +21,21 @@ class MediaController extends BaseController
 
     public function uploadImage(
         MediaService $uploadService,
-        Authenticator $authenticator,
-        Repository $repository
+        Authenticator $authenticator
     ) {
         if (!$user = $authenticator->getCurrentUser()) {
             $this->redirect('/');
         }
 
-        $route_id = intval($_POST['route_id']);
+        $routeId = intval($_POST['route_id']);
 
-        if ($files = $uploadService->handleImageMultiUpload($_FILES['image_field'])) {
+        if ($uploadService->handleImageMultiUpload($_FILES['image_field'], $user, $routeId)) {
             $this->notificationService->addSuccess('Успешен ъплоуд! 😋');
+        } else {
+            $this->notificationService->addError('Ох, ох... Нещо се обърка. Опитай пак.');
         }
 
-        foreach ($files as $file) {
-            $repository->addMedia($file, $user->getId(), $route_id);
-        }
-
-        $this->redirect('/route/' . $route_id);
+        $this->redirect('/route/' . $routeId);
     }
 
     public function deleteMedia(int $mediaId, int $routeId, Authenticator $authenticator, MediaService $mediaService)

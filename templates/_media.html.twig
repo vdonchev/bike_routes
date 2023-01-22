@@ -1,7 +1,7 @@
 {% if media is not empty %}
     <div class="card-body">
         {% for file in media %}
-            <img src="/media/{{ file['file'] }}" class="img-fluid" alt="Responsive image">
+            <img src="/media/{{ file['file'] }}" class="img-fluid img-pinch" alt="Responsive image">
             <div class="mb-3 mt-1">
                 Автор: <b>{{ file['name'] }}</b> <span class="text-muted">({{ file['created_at'] }})</span>
                 {% if file['user_id'] == user.id %}

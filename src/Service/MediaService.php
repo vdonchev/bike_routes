@@ -3,16 +3,12 @@
 namespace Donchev\Framework\Service;
 
 use DI\Container;
+use Donchev\Framework\Model\User;
 use Donchev\Framework\Repository\Repository;
 use Verot\Upload\Upload;
 
 class MediaService
 {
-    /**
-     * @var NotificationService
-     */
-    private $notificationService;
-
     /**
      * @var Repository
      */
@@ -23,14 +19,13 @@ class MediaService
      */
     private $container;
 
-    public function __construct(NotificationService $notificationService, Repository $repository, Container $container)
+    public function __construct(Repository $repository, Container $container)
     {
-        $this->notificationService = $notificationService;
         $this->repository = $repository;
         $this->container = $container;
     }
 
-    public function handleImageMultiUpload(array $payload): ?array
+    public function handleImageMultiUpload(array $payload, User $user, int $routeId): bool
     {
         $files = [];
         foreach ($payload as $k => $l) {
@@ -56,12 +51,16 @@ class MediaService
                     $uploadedFiles[] = $handle->file_dst_name;
                     $handle->clean();
                 } else {
-                    return null;
+                    return false;
                 }
             }
         }
 
-        return $uploadedFiles;
+        foreach ($uploadedFiles as $file) {
+            $this->repository->addMedia($file, $user->getId(), $routeId);
+        }
+
+        return true;
     }
 
     public function deleteImage(int $mediaId, int $authorId): bool
