@@ -19,7 +19,8 @@
 
                         <div class="card-body">
 
-                            <form enctype="multipart/form-data" method="post" action="/upload-image">
+                            <form enctype="multipart/form-data" method="post" action="/upload-image"
+                                  onsubmit='disableButton()'>
                                 <div class="mb-3">
                                     <label for="image_field" class="form-label">Качи снимки</label>
                                     <input type="hidden" name="route_id" value="{{ route.id }}">
@@ -27,7 +28,9 @@
                                            multiple accept="image/png, image/gif, image/jpeg" required>
                                 </div>
 
-                                <button class="btn btn-info "><i class="fa-solid fa-images"></i> Качи</button>
+                                <button class="btn btn-info " id="upload-media-btn"><i class="fa-solid fa-images"></i>
+                                    Качи
+                                </button>
                             </form>
 
                         </div>
