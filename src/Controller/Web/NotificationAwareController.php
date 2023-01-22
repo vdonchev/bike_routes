@@ -21,4 +21,9 @@ abstract class NotificationAwareController extends BaseController
 
         parent::renderTemplate($templateName, $parameters);
     }
+
+    public function getNotificationService(): NotificationService
+    {
+        return $this->notificationService;
+    }
 }

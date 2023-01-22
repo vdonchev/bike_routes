@@ -6,7 +6,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Security\Authenticator;
-use Donchev\Framework\Service\NotificationService;
+use Exception;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -19,17 +19,11 @@ class SecurityController extends NotificationAwareController
     private $authenticator;
 
     /**
-     * @var NotificationService
-     */
-    private $notificationService;
-
-    /**
      * @param Authenticator $authenticator
      */
-    public function __construct(Authenticator $authenticator, NotificationService $notificationService)
+    public function __construct(Authenticator $authenticator)
     {
         $this->authenticator = $authenticator;
-        $this->notificationService = $notificationService;
     }
 
     /**
@@ -51,7 +45,7 @@ class SecurityController extends NotificationAwareController
 
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function doLogin()
     {
@@ -65,12 +59,12 @@ class SecurityController extends NotificationAwareController
         ) {
 
             if ($this->authenticator->login($_POST['username'], $_POST['password'])) {
-                $this->notificationService->addSuccess('Хей! Успешен вход!');
+                $this->getNotificationService()->addSuccess('Хей! Успешен вход!');
                 $this->redirect('/');
             }
         }
 
-        $this->notificationService->addError('Ох, нещо се обърка. Опитай пак 😕');
+        $this->getNotificationService()->addError('Ох, нещо се обърка. Опитай пак 😕');
         $this->redirect('/login');
     }
 
@@ -81,7 +75,7 @@ class SecurityController extends NotificationAwareController
     {
         $this->authenticator->logout();
 
-        $this->notificationService->addSuccess('Успешен изход!');
+        $this->getNotificationService()->addSuccess('Успешен изход!');
 
         $this->redirect('/');
     }
@@ -137,12 +131,12 @@ class SecurityController extends NotificationAwareController
                 $_POST['current-password'], $_POST['new-password'], $_POST['new-password-repeat'], $user
             )) {
 
-                $this->notificationService->addSuccess('Браво! Успешно смени паролата си!');
+                $this->getNotificationService()->addSuccess('Браво! Успешно смени паролата си!');
                 $this->redirect('/profile');
             }
         }
 
-        $this->notificationService->addError('Ох, нещо се обърка. Опитай пак 😕');
+        $this->getNotificationService()->addError('Ох, нещо се обърка. Опитай пак 😕');
 
         $this->redirect('/password');
     }
