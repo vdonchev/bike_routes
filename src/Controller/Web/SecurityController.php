@@ -6,6 +6,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Security\Authenticator;
+use Donchev\Framework\Service\NotificationService;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -18,11 +19,17 @@ class SecurityController extends BaseController
     private $authenticator;
 
     /**
+     * @var NotificationService
+     */
+    private $notificationService;
+
+    /**
      * @param Authenticator $authenticator
      */
-    public function __construct(Authenticator $authenticator)
+    public function __construct(Authenticator $authenticator, NotificationService $notificationService)
     {
         $this->authenticator = $authenticator;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -39,7 +46,8 @@ class SecurityController extends BaseController
             $this->redirect('/');
         }
 
-        $this->renderTemplate('security/login.html.twig');
+        $this->renderTemplate('security/login.html.twig',
+            ['notifications' => $this->notificationService->getNotifications()]);
     }
 
     /**
@@ -58,10 +66,12 @@ class SecurityController extends BaseController
         ) {
 
             if ($this->authenticator->login($_POST['username'], $_POST['password'])) {
+                $this->notificationService->addSuccess('Хей! Успешен вход!');
                 $this->redirect('/');
             }
         }
 
+        $this->notificationService->addError('Ох, нещо се обърка. Опитай пак 😕');
         $this->redirect('/login');
     }
 
@@ -71,6 +81,8 @@ class SecurityController extends BaseController
     public function logout()
     {
         $this->authenticator->logout();
+
+        $this->notificationService->addSuccess('Успешен изход!');
 
         $this->redirect('/');
     }
@@ -106,7 +118,8 @@ class SecurityController extends BaseController
             $this->redirect('/');
         }
 
-        $this->renderTemplate('security/password.html.twig', ['user' => $user]);
+        $this->renderTemplate('security/password.html.twig',
+            ['user' => $user, 'notifications' => $this->notificationService->getNotifications()]);
     }
 
     /**
@@ -125,9 +138,13 @@ class SecurityController extends BaseController
             if ($this->authenticator->passwordUpdate(
                 $_POST['current-password'], $_POST['new-password'], $_POST['new-password-repeat'], $user
             )) {
+
+                $this->notificationService->addSuccess('Браво! Успешно смени паролата си!');
                 $this->redirect('/profile');
             }
         }
+
+        $this->notificationService->addError('Ох, нещо се обърка. Опитай пак 😕');
 
         $this->redirect('/password');
     }

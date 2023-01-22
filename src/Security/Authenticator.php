@@ -51,7 +51,7 @@ class Authenticator
      */
     public function logout()
     {
-        session_destroy();
+        session_unset();
     }
 
     /**
