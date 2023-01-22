@@ -130,13 +130,9 @@ class SecurityController extends NotificationAwareController
             if ($this->authenticator->passwordUpdate(
                 $_POST['current-password'], $_POST['new-password'], $_POST['new-password-repeat'], $user
             )) {
-
-                $this->getNotificationService()->addSuccess('Браво! Успешно смени паролата си!');
                 $this->redirect('/profile');
             }
         }
-
-        $this->getNotificationService()->addError('Ох, нещо се обърка. Опитай пак 😕');
 
         $this->redirect('/password');
     }

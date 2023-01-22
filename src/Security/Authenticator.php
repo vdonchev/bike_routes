@@ -4,6 +4,7 @@ namespace Donchev\Framework\Security;
 
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Repository\Repository;
+use Donchev\Framework\Service\NotificationService;
 use Exception;
 
 class Authenticator
@@ -14,11 +15,17 @@ class Authenticator
     private $repository;
 
     /**
+     * @var NotificationService
+     */
+    private $notificationService;
+
+    /**
      * @param Repository $repository
      */
-    public function __construct(Repository $repository)
+    public function __construct(Repository $repository, NotificationService $notificationService)
     {
         $this->repository = $repository;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -83,20 +90,25 @@ class Authenticator
         $newPassword = $this->sanitize($newPassword);
         $newPasswordRepeat = $this->sanitize($newPasswordRepeat);
 
+        if (!password_verify($currentPassword, $user->getPasswordHash())) {
+            $this->notificationService->addError('Грешка 😶. Текущата парола не е вярна.');
+            return false;
+        }
+
         if ($newPassword != $newPasswordRepeat) {
+            $this->notificationService->addError('Ох... Двете нови пароли не съвпадат!');
             return false;
         }
 
         if (!preg_match("/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/", $newPassword)) {
-            return false;
-        }
-
-        if (!password_verify($currentPassword, $user->getPasswordHash())) {
+            $this->notificationService->addError('Новата парола не отговаря на минималните изисквания');
             return false;
         }
 
         $this->repository->updateUserPassword($user->getId(), password_hash($newPassword, PASSWORD_DEFAULT));
         $this->logout();
+
+        $this->notificationService->addSuccess('Ехааа!! Успешно смени паролата си.');
 
         return true;
     }
