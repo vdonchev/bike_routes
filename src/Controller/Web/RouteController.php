@@ -7,19 +7,17 @@ use DI\NotFoundException;
 use Donchev\Framework\Model\Route;
 use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Security\Authenticator;
-use Donchev\Framework\Service\NotificationService;
 use Exception;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class RouteController extends BaseController
+class RouteController extends NotificationAwareController
 {
     /**
      * @param int $id
      * @param Repository $repository
      * @param Authenticator $authenticator
-     * @param NotificationService $notificationService
      * @return void
      * @throws DependencyException
      * @throws LoaderError
@@ -31,8 +29,7 @@ class RouteController extends BaseController
     public function route(
         int $id,
         Repository $repository,
-        Authenticator $authenticator,
-        NotificationService $notificationService
+        Authenticator $authenticator
     ) {
         if (!$route = $repository->getRoutePerId($id)) {
             $this->redirect('/');
@@ -41,9 +38,8 @@ class RouteController extends BaseController
         $route = new Route($route);
         $user = $authenticator->getCurrentUser();
         $media = $repository->getMediaPerRouteId($route->getId());
-        $notifications = $notificationService->getNotifications();
 
         $this->renderTemplate('/route/route.html.twig',
-            ['route' => $route, 'user' => $user, 'media' => $media, 'notifications' => $notifications]);
+            ['route' => $route, 'user' => $user, 'media' => $media]);
     }
 }

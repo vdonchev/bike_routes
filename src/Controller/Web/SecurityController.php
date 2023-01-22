@@ -11,7 +11,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class SecurityController extends BaseController
+class SecurityController extends NotificationAwareController
 {
     /**
      * @var Authenticator
@@ -46,8 +46,7 @@ class SecurityController extends BaseController
             $this->redirect('/');
         }
 
-        $this->renderTemplate('security/login.html.twig',
-            ['notifications' => $this->notificationService->getNotifications()]);
+        $this->renderTemplate('security/login.html.twig');
     }
 
     /**
@@ -118,8 +117,7 @@ class SecurityController extends BaseController
             $this->redirect('/');
         }
 
-        $this->renderTemplate('security/password.html.twig',
-            ['user' => $user, 'notifications' => $this->notificationService->getNotifications()]);
+        $this->renderTemplate('security/password.html.twig', ['user' => $user]);
     }
 
     /**
