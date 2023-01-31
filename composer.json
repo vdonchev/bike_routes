@@ -27,6 +27,7 @@
     "symfony/console": "^5.3",
     "ext-json": "*",
     "diversen/http-send-file": "^2.0",
-    "verot/class.upload.php": "^2.1"
+    "verot/class.upload.php": "^2.1",
+    "cocur/slugify": "^4.3"
   }
 }
