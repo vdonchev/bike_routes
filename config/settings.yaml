@@ -16,3 +16,6 @@ mail.port:
 media.path:
 media.gpx.path:
 media.map.path:
+
+site.name:
+site.url:

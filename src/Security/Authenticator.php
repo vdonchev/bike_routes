@@ -4,7 +4,7 @@ namespace Donchev\Framework\Security;
 
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Repository\Repository;
-use Donchev\Framework\Service\NotificationService;
+use Donchev\Framework\Service\SiteNotificationService;
 use Exception;
 
 class Authenticator
@@ -15,14 +15,14 @@ class Authenticator
     private $repository;
 
     /**
-     * @var NotificationService
+     * @var SiteNotificationService
      */
     private $notificationService;
 
     /**
      * @param Repository $repository
      */
-    public function __construct(Repository $repository, NotificationService $notificationService)
+    public function __construct(Repository $repository, SiteNotificationService $notificationService)
     {
         $this->repository = $repository;
         $this->notificationService = $notificationService;

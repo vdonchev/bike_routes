@@ -2,7 +2,7 @@
 
 namespace Donchev\Framework\Service;
 
-class NotificationService
+class SiteNotificationService
 {
     public function addInfo(string $text)
     {

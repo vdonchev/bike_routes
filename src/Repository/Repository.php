@@ -84,4 +84,15 @@ class Repository
     {
         return $this->db->query("DELETE FROM media WHERE id=%i AND user_id=%i", $mediaId, $authorId);
     }
+
+    public function getAllSubscribers(): ?array
+    {
+        return $this->db->query('SELECT u.email, u.name FROM subscriber s JOIN user u on s.user_id = u.id WHERE s.is_subscribed = 1');
+    }
+
+    public function getAllSubscribersButCurrentUser(int $currentUserId): ?array
+    {
+        return $this->db->query('SELECT u.email, u.name FROM subscriber s JOIN user u on s.user_id = u.id WHERE s.is_subscribed = 1 AND u.id != %i',
+            $currentUserId);
+    }
 }

@@ -3,13 +3,13 @@
 namespace Donchev\Framework\Controller\Web;
 
 use DI\Annotation\Inject;
-use Donchev\Framework\Service\NotificationService;
+use Donchev\Framework\Service\SiteNotificationService;
 
 abstract class NotificationAwareController extends BaseController
 {
     /**
      * @Inject()
-     * @var NotificationService
+     * @var SiteNotificationService
      */
     private $notificationService;
 
@@ -22,7 +22,7 @@ abstract class NotificationAwareController extends BaseController
         parent::renderTemplate($templateName, $parameters);
     }
 
-    public function getNotificationService(): NotificationService
+    public function getNotificationService(): SiteNotificationService
     {
         return $this->notificationService;
     }

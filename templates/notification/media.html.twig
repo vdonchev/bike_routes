@@ -1,0 +1,16 @@
+{% extends 'notification/_mail.html.twig' %}
+
+{% block title %}Нова Снимка!{% endblock %}
+
+{% block content %}
+    Хей, <b>{{ receiver }}</b>!<br>
+    <br>
+    <b>{{ sender.name }}</b> току-що качи нова снимка към <br>
+    "<b>{{ route.name }}</b>"<br>
+{% endblock %}
+
+{% block link %} <a href="{{ siteUrl }}/route/{{ route.id }}">Виж Снимката Тук</a> {% endblock %}
+
+{% block footer1 %}{{ siteName }}{% endblock %}
+
+{% block footer2 %}developed by mr.d{% endblock %}

@@ -3,8 +3,13 @@
 namespace Donchev\Framework\Service;
 
 use DI\Container;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Repository\Repository;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Verot\Upload\Upload;
 
 class MediaService
@@ -19,12 +24,28 @@ class MediaService
      */
     private $container;
 
-    public function __construct(Repository $repository, Container $container)
-    {
+    /**
+     * @var UserNotificationService
+     */
+    private $userNotificationService;
+
+    public function __construct(
+        Repository $repository,
+        Container $container,
+        UserNotificationService $userNotificationService
+    ) {
         $this->repository = $repository;
         $this->container = $container;
+        $this->userNotificationService = $userNotificationService;
     }
 
+    /**
+     * @throws SyntaxError
+     * @throws NotFoundException
+     * @throws RuntimeError
+     * @throws DependencyException
+     * @throws LoaderError
+     */
     public function handleImageMultiUpload(array $payload, User $user, int $routeId): bool
     {
         $files = [];
@@ -58,6 +79,10 @@ class MediaService
 
         foreach ($uploadedFiles as $file) {
             $this->repository->addMedia($file, $user->getId(), $routeId);
+        }
+
+        if (count($uploadedFiles) > 0) {
+            $this->userNotificationService->newMediaNotification($user, $routeId);
         }
 
         return true;
