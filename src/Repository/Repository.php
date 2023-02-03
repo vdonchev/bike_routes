@@ -56,9 +56,14 @@ class Repository
         return $this->db->queryFirstRow('SELECT * FROM user u WHERE u.id = %i', $userId);
     }
 
-    public function removeTokensPerUser(int $userId)
+    public function removeAllTokensPerUser(int $userId)
     {
         return $this->db->query("DELETE FROM token WHERE user_id=%i", $userId);
+    }
+
+    public function removeTokenPerUser(int $userId, string $token)
+    {
+        return $this->db->query("DELETE FROM token WHERE user_id=%i AND token = %s", $userId, $token);
     }
 
     /**

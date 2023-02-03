@@ -60,7 +60,10 @@ class Authenticator
         $currentUser = $this->getCurrentUser();
 
         /** delete remember me tokens */
-        $this->repository->removeTokensPerUser($currentUser->getId());
+        if (isset($_COOKIE['remember_me']) && !empty($_COOKIE['remember_me'])) {
+            $token = trim($_COOKIE['remember_me']);
+            $this->repository->removeTokenPerUser($currentUser->getId(), $token);
+        }
 
         /** delete remember me cookie */
         setcookie('remember_me', '', 1);
