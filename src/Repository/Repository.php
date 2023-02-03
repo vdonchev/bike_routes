@@ -122,7 +122,7 @@ class Repository
         $this->db->insert('token', [
             'token' => $token,
             'user_id' => $userId,
-            'expiry' => (new DateTime())->add(new DateInterval('P30D')),
+            'expiry' => (new DateTime())->add(new DateInterval('P90D')),
         ]);
     }
 

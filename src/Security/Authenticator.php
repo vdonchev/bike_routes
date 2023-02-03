@@ -190,7 +190,7 @@ class Authenticator
 
     private function setRememberCookie(string $token)
     {
-        setcookie('remember_me', $token, time() + 60 * 60 * 24 * 30);
+        setcookie('remember_me', $token, time() + 60 * 60 * 24 * 90);
     }
 
     /**
