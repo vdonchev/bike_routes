@@ -1,7 +1,5 @@
 {% extends 'notification/_mail.html.twig' %}
 
-{% block title %}Нова Снимка!{% endblock %}
-
 {% block content %}
     Хей, <b>{{ receiver }}</b>!<br>
     <br>
@@ -9,7 +7,7 @@
     "<b>{{ route.name }}</b>"<br>
 {% endblock %}
 
-{% block link %} <a href="{{ siteUrl }}/route/{{ route.id }}">Виж Снимката Тук</a> {% endblock %}
+{% block link %}<a href="{{ siteUrl }}/route/{{ route.id }}">Виж Снимката Тук</a>{% endblock %}
 
 {% block footer1 %}{{ siteName }}{% endblock %}
 

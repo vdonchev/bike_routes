@@ -41,6 +41,7 @@ class EmailService
             ->setFrom($fromName . ' <' . $fromEmail . '>')
             ->setSubject($subject)
             ->setHtmlBody($html)
+            ->setEncoding('UTF8')
             ->addTo($to);
 
         $this->mailer->send($message);
