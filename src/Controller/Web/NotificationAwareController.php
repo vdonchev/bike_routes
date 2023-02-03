@@ -5,7 +5,7 @@ namespace Donchev\Framework\Controller\Web;
 use DI\Annotation\Inject;
 use Donchev\Framework\Service\SiteNotificationService;
 
-abstract class NotificationAwareController extends BaseController
+abstract class NotificationAwareController extends AuthenticationAwareController
 {
     /**
      * @Inject()

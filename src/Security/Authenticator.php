@@ -2,6 +2,7 @@
 
 namespace Donchev\Framework\Security;
 
+use DateTime;
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Service\SiteNotificationService;
@@ -31,7 +32,7 @@ class Authenticator
     /**
      * @throws Exception
      */
-    public function login(string $username, string $plainPassword): bool
+    public function login(string $username, string $plainPassword, bool $remember = false): bool
     {
         $username = $this->sanitize($username);
         $plainPassword = $this->sanitize($plainPassword);
@@ -41,9 +42,7 @@ class Authenticator
         if ($dbUser) {
 
             if (password_verify($plainPassword, $dbUser['password'])) {
-                $user = new User($dbUser);
-
-                $_SESSION['user'] = serialize($user);
+                $this->performLogin($dbUser, $remember);
 
                 return true;
             }
@@ -58,7 +57,18 @@ class Authenticator
      */
     public function logout()
     {
+        $currentUser = $this->getCurrentUser();
+
+        /** delete remember me tokens */
+        $this->repository->removeTokensPerUser($currentUser->getId());
+
+        /** delete remember me cookie */
+        setcookie('remember_me', '', 1);
+
+        /** delete session */
         session_unset();
+
+        session_regenerate_id(true);
     }
 
     /**
@@ -129,5 +139,62 @@ class Authenticator
         }
 
         return false;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function isUserRemembered()
+    {
+        if ($this->getCurrentUser()) {
+            return;
+        }
+
+        if (isset($_COOKIE['remember_me']) && !empty($_COOKIE['remember_me'])) {
+            $token = trim($_COOKIE['remember_me']);
+
+            if ($dbToken = $this->repository->getToken($token)) {
+                $expiry = new DateTime($dbToken['expiry']);
+
+                if ($expiry > new DateTime()) {
+                    $userData = $this->repository->getUserPerId($dbToken['user_id']);
+
+                    $this->performLogin($userData);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $dbUser
+     * @param bool $remember
+     * @return void
+     * @throws Exception
+     */
+    private function performLogin(array $dbUser, bool $remember = false)
+    {
+        $user = new User($dbUser);
+
+        $_SESSION['user'] = serialize($user);
+
+        if ($remember) {
+            $token = $this->generateToken();
+
+            $this->repository->storeToken($token, $user->getId());
+            $this->setRememberCookie($token);
+        }
+    }
+
+    private function setRememberCookie(string $token)
+    {
+        setcookie('remember_me', $token, time() + 60 * 60 * 24 * 30);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function generateToken(): string
+    {
+        return bin2hex(random_bytes(32));
     }
 }

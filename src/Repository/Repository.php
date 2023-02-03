@@ -2,6 +2,8 @@
 
 namespace Donchev\Framework\Repository;
 
+use DateInterval;
+use DateTime;
 use MeekroDB;
 
 class Repository
@@ -43,6 +45,20 @@ class Repository
     public function getUserPerUsername(string $username): ?array
     {
         return $this->db->queryFirstRow('SELECT * FROM user u WHERE u.username = %s', $username);
+    }
+
+    /**
+     * @param int $userId
+     * @return array|null
+     */
+    public function getUserPerId(int $userId): ?array
+    {
+        return $this->db->queryFirstRow('SELECT * FROM user u WHERE u.id = %i', $userId);
+    }
+
+    public function removeTokensPerUser(int $userId)
+    {
+        return $this->db->query("DELETE FROM token WHERE user_id=%i", $userId);
     }
 
     /**
@@ -94,5 +110,19 @@ class Repository
     {
         return $this->db->query('SELECT u.email, u.name FROM subscriber s JOIN user u on s.user_id = u.id WHERE s.is_subscribed = 1 AND u.id != %i',
             $currentUserId);
+    }
+
+    public function storeToken(string $token, int $userId)
+    {
+        $this->db->insert('token', [
+            'token' => $token,
+            'user_id' => $userId,
+            'expiry' => (new DateTime())->add(new DateInterval('P30D')),
+        ]);
+    }
+
+    public function getToken(string $token): ?array
+    {
+        return $this->db->queryFirstRow('SELECT * FROM token t WHERE t.token = %s', $token);
     }
 }

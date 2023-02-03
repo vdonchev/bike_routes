@@ -58,7 +58,10 @@ class SecurityController extends NotificationAwareController
             && !empty($_POST['username']) && !empty($_POST['password'])
         ) {
 
-            if ($this->authenticator->login($_POST['username'], $_POST['password'])) {
+
+            $remember = isset($_POST['remember']) && !empty($_POST['remember']);
+
+            if ($this->authenticator->login($_POST['username'], $_POST['password'], $remember)) {
                 $this->getNotificationService()->addSuccess('Хей! Успешен вход!');
                 $this->redirect('/');
             }
