@@ -24,12 +24,12 @@
             <div class="row stats">
 
                 <div class="col-4">
-                    <p class="text-muted small">Distance</p>
+                    <p class="text-muted small">Дистанция</p>
                     <span>{{ route.length }} km</span>
                 </div>
 
                 <div class="col-4">
-                    <p class="text-muted small">Elev Gain</p>
+                    <p class="text-muted small">Денивелация</p>
                     <span>{{ route.ascent }} m</span>
                 </div>
 
@@ -40,7 +40,7 @@
                         <div class="progress-bar {{ route.getDifficultyClass }}"
                              style="width: {{ route.difficulty }}0%"></div>
                     </div>
-                    <p class="text-muted small">Difficulty</p>
+                    <p class="text-muted small">Трудност</p>
                     <span>{{ route.difficulty }}/10</span>
                 </div>
 
@@ -59,20 +59,19 @@
 
         {# Buttons #}
         <div class="card-footer card-footer-custom">
-
-            <a class="btn btn-sm btn-primary"
-               href="{{ route.gpxUrl }}"
-               target="_blank">
-                <i class="fa-solid fa-link"></i> Open .GPX in Garmin
-            </a>
-
             {% if route.gpxFileName is not null %}
                 <a class="btn btn-sm btn-outline-dark"
                    href="/gpx/download/{{ route.id }}"
                    target="_blank">
-                    <i class="fa-solid fa-circle-down"></i> .GPX
+                    <i class="fa-solid fa-circle-down"></i> Свали .GPX
                 </a>
             {% endif %}
+
+            <a class="btn btn-sm btn-primary"
+               href="{{ route.gpxUrl }}"
+               target="_blank">
+                <i class="fa-solid fa-link"></i> Отвори в Garmin
+            </a>
         </div>
     </div>
 </div>
