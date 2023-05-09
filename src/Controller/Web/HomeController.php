@@ -52,4 +52,34 @@ class HomeController extends NotificationAwareController
                 'user' => $user
             ]);
     }
+
+
+    public function races(
+        Repository $repository,
+        Authenticator $authenticator,
+        Container $container
+    ) {
+
+        $user = $authenticator->getCurrentUser();
+
+        $routesData = $repository->getAllRaceRoutes();
+
+        $routes = [];
+        foreach ($routesData as $route) {
+            $routes[] = new Route($route);
+        }
+
+        $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('d/M/Y H:i:s') : 'No updates yet';
+
+        /** @var LoggerInterface $log */
+        $logger = $container->get('logger.for.visits');
+        $logger->info($_SERVER['REMOTE_ADDR']);
+
+        $this->renderTemplate('home/races.html.twig',
+            [
+                'routes' => $routes,
+                'last_update' => $lastUpdate,
+                'user' => $user
+            ]);
+    }
 }

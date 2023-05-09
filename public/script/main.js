@@ -1,5 +1,5 @@
 setTimeout(function () {
-    $('.alert-success, .alert-info').alert('close');
+    $('.alert-success.alert-notification, .alert-info.alert-notification').alert('close');
 }, 2500);
 
 function disableButton() {

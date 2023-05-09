@@ -26,7 +26,11 @@ class Repository
      */
     public function getAllRoutes(): ?array
     {
-        return $this->db->query('SELECT * FROM route r ORDER BY r.id DESC');
+        return $this->db->query('SELECT * FROM route r WHERE r.is_race = 0 ORDER BY r.id DESC');
+    }
+
+    public function getAllRaceRoutes(): ?array
+    {        return $this->db->query('SELECT * FROM route r WHERE r.is_race = 1 ORDER BY r.id DESC');
     }
 
     /**
