@@ -36,6 +36,8 @@ class SecurityController extends NotificationAwareController
      */
     public function login()
     {
+        $this->logVisit();
+
         if ($this->currentUserExists()) {
             $this->redirect('/');
         }
@@ -76,6 +78,8 @@ class SecurityController extends NotificationAwareController
      */
     public function logout()
     {
+        $this->logVisit();
+
         $this->authenticator->logout();
 
         $this->getNotificationService()->addSuccess('Успешен изход!');
@@ -93,6 +97,8 @@ class SecurityController extends NotificationAwareController
      */
     public function profile()
     {
+        $this->logVisit();
+
         if (!$user = $this->currentUserExists()) {
             $this->redirect('/');
         }

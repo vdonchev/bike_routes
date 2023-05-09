@@ -91,4 +91,10 @@ abstract class BaseController
         header("Location: {$url}");
         exit();
     }
+
+    public function logVisit()
+    {
+        $logger = $this->container->get('logger.for.visits');
+        $logger->info($_SERVER['REMOTE_ADDR'] . ' => ' . $_SERVER['REQUEST_URI']);
+    }
 }

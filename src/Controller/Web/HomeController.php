@@ -29,6 +29,7 @@ class HomeController extends NotificationAwareController
         Authenticator $authenticator,
         Container $container
     ) {
+        $this->logVisit();
 
         $user = $authenticator->getCurrentUser();
 
@@ -40,10 +41,6 @@ class HomeController extends NotificationAwareController
         }
 
         $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('d/M/Y H:i:s') : 'No updates yet';
-
-        /** @var LoggerInterface $log */
-        $logger = $container->get('logger.for.visits');
-        $logger->info($_SERVER['REMOTE_ADDR']);
 
         $this->renderTemplate('home/index.html.twig',
             [
@@ -59,6 +56,7 @@ class HomeController extends NotificationAwareController
         Authenticator $authenticator,
         Container $container
     ) {
+        $this->logVisit();
 
         $user = $authenticator->getCurrentUser();
 
@@ -70,10 +68,6 @@ class HomeController extends NotificationAwareController
         }
 
         $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('d/M/Y H:i:s') : 'No updates yet';
-
-        /** @var LoggerInterface $log */
-        $logger = $container->get('logger.for.visits');
-        $logger->info($_SERVER['REMOTE_ADDR']);
 
         $this->renderTemplate('home/races.html.twig',
             [

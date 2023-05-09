@@ -31,6 +31,8 @@ class RouteController extends NotificationAwareController
         Repository $repository,
         Authenticator $authenticator
     ) {
+        $this->logVisit();
+
         if (!$route = $repository->getRoutePerId($id)) {
             $this->redirect('/');
         }

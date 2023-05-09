@@ -18,6 +18,8 @@ class MediaController extends NotificationAwareController
         MediaService $uploadService,
         Authenticator $authenticator
     ) {
+        $this->logVisit();
+
         if (!$user = $authenticator->getCurrentUser()) {
             $this->redirect('/');
         }
@@ -35,6 +37,8 @@ class MediaController extends NotificationAwareController
 
     public function deleteMedia(int $mediaId, int $routeId, Authenticator $authenticator, MediaService $mediaService)
     {
+        $this->logVisit();
+
         if ($mediaService->deleteImage($mediaId, $authenticator->getCurrentUser()->getId())) {
             $this->getNotificationService()->addSuccess('Туй то! Снимката е изтрита успешно!');
         }
@@ -53,6 +57,8 @@ class MediaController extends NotificationAwareController
      */
     public function downloadGpx(int $id, Repository $repository, Container $container)
     {
+        $this->logVisit();
+
         $route = $repository->getRoutePerId($id);
         $route = new Route($route);
 
@@ -66,6 +72,8 @@ class MediaController extends NotificationAwareController
 
     public function uploadRoute(Authenticator $authenticator)
     {
+        $this->logVisit();
+
         if (!$authenticator->isAdmin()) {
             $this->redirect('/');
         }
