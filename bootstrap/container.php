@@ -47,6 +47,9 @@ return function (array $settings) {
                     $twig->addExtension(new DebugExtension());
                 }
 
+                $twig->addGlobal('css_ver',
+                    fileatime(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'style' . DIRECTORY_SEPARATOR . 'main.css'));
+
                 return $twig;
             }),
 
