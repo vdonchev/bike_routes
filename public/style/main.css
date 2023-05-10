@@ -29,6 +29,13 @@ html, body {
     font-size: .8rem;
 }
 
+.badge-race {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    font-size: .8rem;
+}
+
 .list-group-custom li {
     border: none;
 }

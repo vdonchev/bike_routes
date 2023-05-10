@@ -13,6 +13,11 @@
             <span class="badge text-bg-success fa-pull-right small badge-custom">Ново!</span>
         {% endif %}
 
+        {% if route.isRace == true %}
+            <span class="badge text-bg-info small badge-race">Race</span>
+        {% endif %}
+
+
         {# Title #}
         <h5 class="card-header card-header-custom">
             <a href="/route/{{ route.id }}" class="title-link">{{ route.name }}</a>

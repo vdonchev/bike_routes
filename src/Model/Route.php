@@ -34,6 +34,9 @@ class Route
     /** @var int */
     private $ascent;
 
+    /** @var int */
+    private $isRace;
+
     /** @var DateTime */
     private $createdAt;
 
@@ -54,6 +57,7 @@ class Route
         $this->setDifficulty($data['difficulty']);
         $this->setLength($data['length']);
         $this->setAscent($data['ascent']);
+        $this->setIsRace($data['is_race']);
         $this->setCreatedAt(new DateTime($data['created_at']));
         $this->setUpdatedAt(new DateTime($data['updated_at']));
     }
@@ -198,5 +202,15 @@ class Route
             default:
                 return '';
         }
+    }
+
+    public function getIsRace(): int
+    {
+        return $this->isRace;
+    }
+
+    public function setIsRace(int $isRace)
+    {
+        $this->isRace = $isRace;
     }
 }
