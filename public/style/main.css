@@ -65,6 +65,9 @@ html, body {
 }
 
 .alert-krisi {
-    border: 1px solid deeppink;
-    background-color: lightpink;
+    border: 1px solid lightgray;
+    background-image: url("/asset/race.png");
+    background-repeat: no-repeat;
+    background-position-y: revert;
+    background-color: white;
 }
