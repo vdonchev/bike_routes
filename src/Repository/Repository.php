@@ -60,6 +60,18 @@ class Repository
         return $result->fetch_object(Route::class);
     }
 
+    public function getAllLatestRoutes(int $count = 3): array
+    {
+        $result = $this->db->queryRaw("SELECT * FROM route r ORDER BY r.created_at DESC LIMIT {$count}");
+
+        $all = [];
+        while ($staff = $result->fetch_object(Route::class)) {
+            $all[] = $staff;
+        }
+
+        return $all;
+    }
+
     /**
      * @param string $username
      * @return array|null

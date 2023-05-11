@@ -1,0 +1,19 @@
+{% if latest_routes %}
+    <div class="mb-3">
+        <h2 class="h6">Последно добавени:</h2>
+        <ol class="list-group list-group-numbered">
+
+            {% for route in latest_routes %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">
+                            <a class="text-black" href="/route/{{ route.id }}">{{ route.name }}</a>
+                        </div>
+                        Дата: {{ route.created_at }}
+                    </div>
+                    <span class="badge bg-primary rounded-pill">{{ route.length }} km</span>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+{% endif %}

@@ -9,11 +9,6 @@
 
         <div class="row">
             <div class="col-12">
-                <div class="alert alert-light" role="alert">
-                    Състезателни Трасета: <b>{{ routes|length }}</b> <span
-                            class="text-muted">(Последно обновяване: {{ last_update }})</span>
-                </div>
-
 
                 <div class="row">
 
@@ -22,6 +17,12 @@
                     {% endfor %}
 
                 </div>
+
+                <div class="alert alert-light" role="alert">
+                    Състезателни Трасета: <b>{{ routes|length }}</b> <span
+                            class="text-muted">(Последно обновяване: {{ last_update }})</span>
+                </div>
+
             </div>
         </div>
     </div>

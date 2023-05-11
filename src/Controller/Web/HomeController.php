@@ -2,14 +2,11 @@
 
 namespace Donchev\Framework\Controller\Web;
 
-use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
-use Donchev\Framework\Model\Route;
 use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Security\Authenticator;
 use Exception;
-use Psr\Log\LoggerInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -26,30 +23,39 @@ class HomeController extends NotificationAwareController
      */
     public function index(
         Repository $repository,
-        Authenticator $authenticator,
-        Container $container
+        Authenticator $authenticator
     ) {
         $this->logVisit();
 
         $user = $authenticator->getCurrentUser();
 
         $routes = $repository->getAllRoutes();
+        $latestRoutes = $repository->getAllLatestRoutes();
 
         $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('d/M/Y H:i:s') : 'No updates yet';
 
         $this->renderTemplate('home/index.html.twig',
             [
                 'routes' => $routes,
+                'latest_routes' => $latestRoutes,
                 'last_update' => $lastUpdate,
                 'user' => $user
             ]);
     }
 
-
+    /**
+     * @param Repository $repository
+     * @param Authenticator $authenticator
+     * @return void
+     * @throws DependencyException
+     * @throws LoaderError
+     * @throws NotFoundException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function races(
         Repository $repository,
-        Authenticator $authenticator,
-        Container $container
+        Authenticator $authenticator
     ) {
         $this->logVisit();
 

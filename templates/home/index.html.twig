@@ -21,11 +21,6 @@
 
                 {% include '_last_update.html.twig' %}
 
-{#                <div class="alert alert-light" role="alert">#}
-{#                    Трасета: <b>{{ routes|length }}</b> <span#}
-{#                            class="text-muted">(Последно обновяване: {{ last_update }})</span>#}
-{#                </div>#}
-
                 <div class="row">
 
                     {% for route in routes %}
@@ -33,6 +28,12 @@
                     {% endfor %}
 
                 </div>
+
+                <div class="alert alert-light" role="alert">
+                    Трасета: <b>{{ routes|length }}</b> <span
+                            class="text-muted">(Последно обновяване: {{ last_update }})</span>
+                </div>
+
             </div>
         </div>
     </div>
