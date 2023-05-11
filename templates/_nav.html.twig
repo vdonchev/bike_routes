@@ -1,50 +1,49 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom shadow-sm">
+
     <div class="container">
+
         <a class="navbar-brand" href="/">
             <img src="/asset/logo.png" alt="Krisi Routes" class="logo" style="width: 100%">
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-none d-lg-flex">
+        </ul>
+
+        <ul class="navbar-nav mb-2 mb-lg-0 d-none d-lg-flex">
+            {% include '_nav_items.html.twig' %}
+        </ul>
+
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
+        <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1"
+             id="offcanvasDarkNavbar"
+             aria-labelledby="offcanvasDarkNavbarLabel">
 
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                {% if user %}
-                    <li class="nav-item">
-                        <span class="nav-link">Здравей, <b>{{ user.name }}</b>! 😀</span>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Начало</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Трасета</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/races">Състезания</a>
-                </li>
-                {% if user %}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/profile">Профил</a>
-                    </li>
-                    {% if user.isAdmin() %}
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/route/add"><b>Добави Трасе</b></a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/logout">Изход</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/login"><i class="fa-solid fa-user"></i>
-                            Вход</a>
-                    </li>
-                {% endif %}
-            </ul>
+            <div class="offcanvas-header">
+
+                <h5 class="offcanvas-title text-decoration-underline" id="offcanvasDarkNavbarLabel">МЕНЮ 😛</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+
+            </div>
+
+            <div class="offcanvas-body">
+
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+
+                    {% include '_nav_items.html.twig' %}
+
+                </ul>
+
+            </div>
+
         </div>
+
     </div>
+
 </nav>

@@ -1,0 +1,29 @@
+{% if user %}
+    <li class="nav-item">
+        <span class="nav-link">Здравей, <b>{{ user.name }}</b>! 😀</span>
+    </li>
+{% endif %}
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="/">Трасета</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="/races">Race трасета</a>
+</li>
+{% if user %}
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/profile">Профил</a>
+    </li>
+    {% if user.isAdmin() %}
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/route/add"><b>Добави Трасе</b></a>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/logout">Изход</a>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/login"><i class="fa-solid fa-user"></i>
+            Вход</a>
+    </li>
+{% endif %}
