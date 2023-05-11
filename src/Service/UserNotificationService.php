@@ -58,7 +58,7 @@ class UserNotificationService
             $siteUrl = $this->container->get('app.settings')['site.url'];
             $siteName = $this->container->get('app.settings')['site.name'];
 
-            $route = new Route($this->repository->getRoutePerId($routeId));
+            $route = $this->repository->getRoutePerId($routeId);
 
             foreach ($subscribers as $subscriber) {
 

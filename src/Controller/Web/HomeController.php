@@ -33,12 +33,7 @@ class HomeController extends NotificationAwareController
 
         $user = $authenticator->getCurrentUser();
 
-        $routesData = $repository->getAllRoutes();
-
-        $routes = [];
-        foreach ($routesData as $route) {
-            $routes[] = new Route($route);
-        }
+        $routes = $repository->getAllRoutes();
 
         $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('d/M/Y H:i:s') : 'No updates yet';
 
@@ -60,12 +55,7 @@ class HomeController extends NotificationAwareController
 
         $user = $authenticator->getCurrentUser();
 
-        $routesData = $repository->getAllRaceRoutes();
-
-        $routes = [];
-        foreach ($routesData as $route) {
-            $routes[] = new Route($route);
-        }
+        $routes = $repository->getAllRaceRoutes();
 
         $lastUpdate = $routes ? $routes[0]->getCreatedAt()->format('d/M/Y H:i:s') : 'No updates yet';
 

@@ -19,10 +19,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
-                <div class="alert alert-light" role="alert">
-                    Трасета: <b>{{ routes|length }}</b> <span
-                            class="text-muted">(Последно обновяване: {{ last_update }})</span>
-                </div>
+                {% include '_last_update.html.twig' %}
+
+{#                <div class="alert alert-light" role="alert">#}
+{#                    Трасета: <b>{{ routes|length }}</b> <span#}
+{#                            class="text-muted">(Последно обновяване: {{ last_update }})</span>#}
+{#                </div>#}
 
                 <div class="row">
 

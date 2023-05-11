@@ -8,59 +8,40 @@ use Exception;
 class Route
 {
     /** @var int */
-    private $id;
+    public $id;
 
     /** @var string */
-    private $name;
+    public $name;
 
     /** @var string|null */
-    private $mapUrl;
+    public $map;
 
     /** @var string */
-    private $gpxUrl;
+    public $gpx_url;
 
     /** @var string|null */
-    private $gpxFileName;
+    public $gpx_file;
 
     /** @var string|null */
-    private $note;
+    public $note;
 
     /** @var int */
-    private $difficulty;
+    public $difficulty;
 
     /** @var double */
-    private $length;
+    public $length;
 
     /** @var int */
-    private $ascent;
+    public $ascent;
 
     /** @var int */
-    private $isRace;
+    public $is_race;
 
     /** @var DateTime */
-    private $createdAt;
+    public $created_at;
 
     /** @var DateTime */
-    private $updatedAt;
-
-    /**
-     * @throws Exception
-     */
-    public function __construct(array $data)
-    {
-        $this->setId($data['id']);
-        $this->setName($data['name']);
-        $this->setMapUrl($data['map']);
-        $this->setGpxUrl($data['gpx_url']);
-        $this->setGpxFileName($data['gpx_file']);
-        $this->setNote($data['note']);
-        $this->setDifficulty($data['difficulty']);
-        $this->setLength($data['length']);
-        $this->setAscent($data['ascent']);
-        $this->setIsRace($data['is_race']);
-        $this->setCreatedAt(new DateTime($data['created_at']));
-        $this->setUpdatedAt(new DateTime($data['updated_at']));
-    }
+    public $updated_at;
 
     public function getId(): int
     {
@@ -84,32 +65,32 @@ class Route
 
     public function getMapUrl(): string
     {
-        return $this->mapUrl;
+        return $this->map;
     }
 
-    public function setMapUrl(?string $mapUrl)
+    public function setMapUrl(?string $map)
     {
-        $this->mapUrl = $mapUrl;
+        $this->map = $map;
     }
 
     public function getGpxUrl(): string
     {
-        return $this->gpxUrl;
+        return $this->gpx_url;
     }
 
-    public function setGpxUrl(string $gpxUrl)
+    public function setGpxUrl(string $gpx_url)
     {
-        $this->gpxUrl = $gpxUrl;
+        $this->gpx_url = $gpx_url;
     }
 
     public function getGpxFileName(): ?string
     {
-        return $this->gpxFileName;
+        return $this->gpx_file;
     }
 
-    public function setGpxFileName(?string $gpxFileName)
+    public function setGpxFileName(?string $gpx_file)
     {
-        $this->gpxFileName = $gpxFileName;
+        $this->gpx_file = $gpx_file;
     }
 
     public function getNote(): ?string
@@ -152,29 +133,39 @@ class Route
         $this->ascent = $ascent;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getIsRace(): int
     {
-        return $this->createdAt;
+        return $this->is_race;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setIsRace(int $is_race)
     {
-        $this->createdAt = $createdAt;
+        $this->is_race = $is_race;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return new DateTime($this->created_at);
+    }
+
+    public function setCreatedAt(DateTime $created_at)
+    {
+        $this->created_at = $created_at;
     }
 
     public function getUpdatedAt(): DateTime
     {
-        return $this->updatedAt;
+        return new DateTime($this->updated_at);
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updated_at)
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated_at = $updated_at;
     }
 
     public function isNew(): bool
     {
-        return $this->createdAt > date_create('7 days ago');
+        return $this->created_at > date_create('7 days ago');
     }
 
     public function getDifficultyClass(): string
@@ -202,15 +193,5 @@ class Route
             default:
                 return '';
         }
-    }
-
-    public function getIsRace(): int
-    {
-        return $this->isRace;
-    }
-
-    public function setIsRace(int $isRace)
-    {
-        $this->isRace = $isRace;
     }
 }

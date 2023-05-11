@@ -37,7 +37,6 @@ class RouteController extends NotificationAwareController
             $this->redirect('/');
         }
 
-        $route = new Route($route);
         $user = $authenticator->getCurrentUser();
         $media = $repository->getMediaPerRouteId($route->getId());
 

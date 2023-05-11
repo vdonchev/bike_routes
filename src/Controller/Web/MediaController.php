@@ -60,7 +60,6 @@ class MediaController extends NotificationAwareController
         $this->logVisit();
 
         $route = $repository->getRoutePerId($id);
-        $route = new Route($route);
 
         $sf = new sendfile();
         $sf->contentType('application/gpx+xml');

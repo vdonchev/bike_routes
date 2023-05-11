@@ -4,6 +4,7 @@ namespace Donchev\Framework\Repository;
 
 use DateInterval;
 use DateTime;
+use Donchev\Framework\Model\Route;
 use MeekroDB;
 
 class Repository
@@ -24,22 +25,39 @@ class Repository
     /**
      * @return array|null
      */
-    public function getAllRoutes(): ?array
+    public function getAllRoutes(): array
     {
-        return $this->db->query('SELECT * FROM route r WHERE r.is_race = 0 ORDER BY r.id DESC');
+        $result = $this->db->queryRaw('SELECT * FROM route r WHERE r.is_race = 0 ORDER BY r.id DESC');
+
+        $all = [];
+        while ($staff = $result->fetch_object(Route::class)) {
+            $all[] = $staff;
+        }
+
+        return $all;
     }
 
-    public function getAllRaceRoutes(): ?array
-    {        return $this->db->query('SELECT * FROM route r WHERE r.is_race = 1 ORDER BY r.id DESC');
+    public function getAllRaceRoutes(): array
+    {
+        $result = $this->db->queryRaw('SELECT * FROM route r WHERE r.is_race = 1 ORDER BY r.id DESC');
+
+        $all = [];
+        while ($staff = $result->fetch_object(Route::class)) {
+            $all[] = $staff;
+        }
+
+        return $all;
     }
 
     /**
      * @param int $id
      * @return array|null
      */
-    public function getRoutePerId(int $id): ?array
+    public function getRoutePerId(int $id): ?Route
     {
-        return $this->db->queryFirstRow('SELECT * FROM route r WHERE r.id = %i', $id);
+        $result = $this->db->queryRaw('SELECT * FROM route r WHERE r.id = %i', $id);
+
+        return $result->fetch_object(Route::class);
     }
 
     /**
