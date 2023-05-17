@@ -104,4 +104,41 @@ class MediaService
 
         return false;
     }
+
+    public function uploadFile(
+        array $file,
+        string $destination,
+        string $fileName = null,
+        bool $randomName = false,
+        string $ext = null
+    ) {
+        $handle = new Upload($file);
+        if ($handle->uploaded) {
+
+            if ($fileName) {
+                $handle->file_new_name_body = $fileName;
+            }
+
+            if ($randomName) {
+                $handle->file_new_name_body = strtoupper(uniqid());
+            }
+
+            if ($ext) {
+                $handle->file_new_name_ext = $ext;
+            }
+
+            $handle->process($destination);
+
+            if ($handle->processed) {
+                $uploadedFile = $handle->file_dst_name;
+                $handle->clean();
+
+                return $uploadedFile;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
 }

@@ -10,7 +10,8 @@ return [
     ['GET', '/races', [HomeController::class, 'races']],
 
     ['GET', '/route/{id:\d+}', [RouteController::class, 'route']],
-    ['GET', '/route/add', [MediaController::class, 'uploadRoute']],
+    ['GET', '/route/add', [RouteController::class, 'add']],
+    ['POST', '/route/add', [RouteController::class, 'addSubmit']],
     ['GET', '/gpx/download/{id:\d+}', [MediaController::class, 'downloadGpx']],
     ['POST', '/upload-image', [MediaController::class, 'uploadImage']],
     ['GET', '/media/delete/{mediaId:\d+}/{routeId:\d+}', [MediaController::class, 'deleteMedia']],

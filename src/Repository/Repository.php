@@ -164,4 +164,30 @@ class Repository
     {
         return $this->db->queryFirstRow('SELECT * FROM token t WHERE t.token = %s', $token);
     }
+
+    public function addRoute(
+        string $name,
+        string $map,
+        string $gpx,
+        string $url,
+        int $difficulty,
+        float $length,
+        int $ascent,
+        string $note = null,
+        bool $race = false
+    ) {
+        $this->db->insert('route', [
+            'name' => $name,
+            'map' => $map,
+            'gpx_url' => $url,
+            'gpx_file' => $gpx,
+            'note' => $note,
+            'difficulty' => $difficulty,
+            'length' => $length,
+            'ascent' => $ascent,
+            'is_race' => $race,
+        ]);
+
+        return $this->db->insert_id;
+    }
 }

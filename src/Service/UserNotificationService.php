@@ -5,7 +5,6 @@ namespace Donchev\Framework\Service;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
-use Donchev\Framework\Model\Route;
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Repository\Repository;
 use Exception;
@@ -71,6 +70,38 @@ class UserNotificationService
                 ]);
 
                 $title = $subscriber['name'] . ', ' . $user->getName() . ' качи нова снимка! 😋';
+
+                $this->emailService->sendHtmlMail(
+                    $title,
+                    $html,
+                    $subscriber['email']
+                );
+            }
+        }
+    }
+
+    public function newRouteNotification(User $user, int $routeId)
+    {
+        if ($subscribers = $this->repository->getAllSubscribersButCurrentUser($user->getId())) {
+
+            $twig = $this->container->get(Environment::class);
+
+            $siteUrl = $this->container->get('app.settings')['site.url'];
+            $siteName = $this->container->get('app.settings')['site.name'];
+
+            $route = $this->repository->getRoutePerId($routeId);
+
+            foreach ($subscribers as $subscriber) {
+
+                $html = $twig->render('notification/route.html.twig', [
+                    'receiver' => $subscriber['name'],
+                    'sender' => $user,
+                    'route' => $route,
+                    'siteUrl' => $siteUrl,
+                    'siteName' => $siteName,
+                ]);
+
+                $title = $subscriber['name'] . ', ' . $user->getName() . ' качи ново трасе! 🚴‍♂️';
 
                 $this->emailService->sendHtmlMail(
                     $title,

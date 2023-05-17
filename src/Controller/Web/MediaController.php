@@ -6,7 +6,6 @@ use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
 use diversen\sendfile;
-use Donchev\Framework\Model\Route;
 use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Security\Authenticator;
 use Donchev\Framework\Service\MediaService;
@@ -67,18 +66,5 @@ class MediaController extends NotificationAwareController
         $file = $container->get('app.settings')['media.gpx.path'] . DIRECTORY_SEPARATOR . $route->getGpxFileName();
 
         $sf->send($file);
-    }
-
-    public function uploadRoute(Authenticator $authenticator)
-    {
-        $this->logVisit();
-
-        if (!$authenticator->isAdmin()) {
-            $this->redirect('/');
-        }
-
-        $user = $authenticator->getCurrentUser();
-
-        $this->renderTemplate('/route/add.html.twig', ['user' => $user]);
     }
 }

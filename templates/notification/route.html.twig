@@ -1,0 +1,14 @@
+{% extends 'notification/_mail.html.twig' %}
+
+{% block content %}
+    Хей, <b>{{ receiver }}</b>!<br>
+    <br>
+    <b>{{ sender.name }}</b> току-що качи ново трасе!<br>
+    "<b>{{ route.name }}</b>"<br>
+{% endblock %}
+
+{% block link %}<a href="{{ siteUrl }}/route/{{ route.id }}">Виж Трасето Тук</a>{% endblock %}
+
+{% block footer1 %}{{ siteName }}{% endblock %}
+
+{% block footer2 %}developed by mr.d{% endblock %}
