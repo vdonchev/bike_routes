@@ -178,7 +178,7 @@ class Route
 
     public function isNew(): bool
     {
-        return $this->created_at > date_create('7 days ago');
+        return $this->getCreatedAt() > date_create('7 days ago');
     }
 
     public function getDifficultyClass(): string
