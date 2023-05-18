@@ -96,8 +96,8 @@ class RouteController extends NotificationAwareController
             $map = $_FILES['route_map'];
             $gpx = $_FILES['route_gpx'];
 
-            $note = $_POST['route_notes'] ?? null;
-            $strava_url = $_POST['route_strava_url'] ?? null;
+            $note = !empty($_POST['route_notes']) ? $_POST['route_notes'] : null;
+            $strava_url = !empty($_POST['route_strava_url']) ? $_POST['route_strava_url'] : null;
             $isRace = isset($_POST['route_is_race']);
 
             $mapUpload = $mediaService->uploadFile(
