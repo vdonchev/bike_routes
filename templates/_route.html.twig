@@ -9,6 +9,7 @@
             </a>
         {% endif %}
 
+        {{ dump(route.isNew) }}
         {% if route.isNew == true %}
             <span class="badge text-bg-success fa-pull-right small badge-custom">Ново!</span>
         {% endif %}
@@ -82,8 +83,8 @@
                         <i class="fa-solid fa-link"></i> Отвори в
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route.gpxUrl }}">Garmin.com</a></li>
-                        <li><a class="dropdown-item" href="{{ route.stravaUrl }}">Strava.com</a></li>
+                        <li><a class="dropdown-item" target="_blank" href="{{ route.gpxUrl }}">Garmin.com</a></li>
+                        <li><a class="dropdown-item" target="_blank" href="{{ route.stravaUrl }}">Strava.com</a></li>
                     </ul>
                 </div>
 
