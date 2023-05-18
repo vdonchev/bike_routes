@@ -13,11 +13,11 @@
     <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="/profile">Профил</a>
     </li>
-    {% if user.isAdmin() %}
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/route/add"><b>Добави Трасе</b></a>
-        </li>
-    {% endif %}
+    {#    {% if user.isAdmin() %} #}
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="/route/add"><b>Добави Трасе</b></a>
+    </li>
+    {#    {% endif %} #}
     <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="/logout">Изход</a>
     </li>
