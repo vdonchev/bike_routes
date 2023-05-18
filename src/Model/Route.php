@@ -3,7 +3,6 @@
 namespace Donchev\Framework\Model;
 
 use DateTime;
-use Exception;
 
 class Route
 {

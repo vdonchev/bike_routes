@@ -59,7 +59,7 @@ class RouteController extends NotificationAwareController
     {
         $this->logVisit();
 
-        if (!$authenticator->isAdmin()) {
+        if (!$authenticator->getCurrentUser()) {
             $this->redirect('/');
         }
 
