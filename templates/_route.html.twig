@@ -72,11 +72,29 @@
                 </a>
             {% endif %}
 
-            <a class="btn btn-sm btn-primary"
-               href="{{ route.gpxUrl }}"
-               target="_blank">
-                <i class="fa-solid fa-link"></i> Отвори в Garmin
-            </a>
+
+
+            {% if route.stravaUrl %}
+
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <i class="fa-solid fa-link"></i> Отвори в
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ route.gpxUrl }}">Garmin.com</a></li>
+                        <li><a class="dropdown-item" href="{{ route.stravaUrl }}">Strava.com</a></li>
+                    </ul>
+                </div>
+
+            {% else %}
+
+                <a class="btn btn-sm btn-primary" href="{{ route.gpxUrl }}" target="_blank">
+                    <i class="fa-solid fa-link"></i> Отвори в Garmin
+                </a>
+
+            {% endif %}
+
         </div>
     </div>
 </div>

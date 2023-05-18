@@ -19,6 +19,9 @@ class Route
     /** @var string */
     public $gpx_url;
 
+    /** @var string */
+    public $strava_url;
+
     /** @var string|null */
     public $gpx_file;
 
@@ -81,6 +84,16 @@ class Route
     public function setGpxUrl(string $gpx_url)
     {
         $this->gpx_url = $gpx_url;
+    }
+
+    public function getStravaUrl(): ?string
+    {
+        return $this->strava_url;
+    }
+
+    public function setStravaUrl(?string $strava_url)
+    {
+        $this->strava_url = $strava_url;
     }
 
     public function getGpxFileName(): ?string

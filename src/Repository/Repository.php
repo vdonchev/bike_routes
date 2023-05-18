@@ -174,12 +174,14 @@ class Repository
         float $length,
         int $ascent,
         string $note = null,
+        string $strava = null,
         bool $race = false
     ) {
         $this->db->insert('route', [
             'name' => $name,
             'map' => $map,
             'gpx_url' => $url,
+            'strava_url' => $strava,
             'gpx_file' => $gpx,
             'note' => $note,
             'difficulty' => $difficulty,

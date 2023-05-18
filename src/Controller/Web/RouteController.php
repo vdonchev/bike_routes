@@ -97,6 +97,7 @@ class RouteController extends NotificationAwareController
             $gpx = $_FILES['route_gpx'];
 
             $note = $_POST['route_notes'] ?? null;
+            $strava_url = $_POST['route_strava_url'] ?? null;
             $isRace = isset($_POST['route_is_race']);
 
             $mapUpload = $mediaService->uploadFile(
@@ -109,7 +110,7 @@ class RouteController extends NotificationAwareController
 
             if ($mapUpload && $gpxUpload) {
                 if ($routeId = $repository->addRoute(
-                    $name, $mapUpload, $gpxUpload, $url, $difficulty, $length, $ascent, $note, $isRace
+                    $name, $mapUpload, $gpxUpload, $url, $difficulty, $length, $ascent, $note, $strava_url, $isRace
                 )) {
                     $notificationService->addSuccess('Трасето е качено успешно!');
 

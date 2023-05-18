@@ -12,68 +12,113 @@
 
             <div class="col-lg-6 offset-lg-3">
 
-                <h1 class="h5">Добави трасе</h1>
+                <h1 class="h4">Добави трасе</h1>
                 <hr>
 
-                <form enctype="multipart/form-data" method="post" action="/route/add"
+                <form enctype="multipart/form-data" method="post" action="/route/add" class="form-floating"
                       onsubmit='disableButton()'>
 
                     <div class="mb-3">
-                        <label for="route_name" class="form-label">Име</label>
-                        <input class="form-control" type="text" name="route_name" id="route_name" required>
+                        <div class="form-floating">
+                            <input class="form-control" type="text" name="route_name" id="route_name" placeholder="Име"
+                                   required>
+                            <label for="route_name" class="form-label">Име</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="route_map" class="form-label">Карта</label>
+                                <input class="form-control" type="file" size="32" name="route_map" value=""
+                                       accept="image/png, image/jpeg" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="route_gpx" class="form-label">GPX файл</label>
+                                <input class="form-control" type="file" size="32" name="route_gpx" value=""
+                                       accept=".gpx" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" type="text" name="route_url" id="route_url"
+                                           placeholder="Garmin URL" required>
+                                    <label for="route_url" class="form-label">Garmin URL</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" type="text" name="route_strava_url"
+                                           id="route_strava_url" placeholder="Strava URL">
+                                    <label for="route_strava_url" class="form-label">Strava URL <span
+                                                class="text-muted small">(по избор)</span></label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="route_map" class="form-label">Карта</label>
-                        <input class="form-control" type="file" size="32" name="route_map" value=""
-                               accept="image/png" required>
+                        <div class="form-floating">
+                            <textarea class="form-control" type="text" name="route_notes" id="route_notes"
+                                      placeholder="Бележки"
+                                      style="height: 100%"></textarea>
+                            <label for="route_notes">Бележки <span class="text-muted small">(по избор)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" type="number" min="1" max="10" name="route_difficulty"
+                                           placeholder="Трудност"
+                                           id="route_difficulty" required>
+                                    <label for="route_difficulty" class="form-label">Трудност</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" type="number" step="0.01" min="1" name="route_length"
+                                           id="route_length" placeholder="Дължина" required>
+                                    <label for="route_length" class="form-label">Дължина (км)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <input class="form-control" type="number" min="1" name="route_ascent"
+                                           id="route_ascent" placeholder="Денивелация" required>
+                                    <label for="route_ascent" class="form-label">Денивелация (м)</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="route_gpx" class="form-label">GPX файл</label>
-                        <input class="form-control" type="file" size="32" name="route_gpx" value=""
-                               accept=".gpx" required>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="route_is_race"
+                                   id="route_is_race">
+                            <label for="route_is_race" class="form-label">Състезатлно трасе?</label>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="route_url" class="form-label">Garmin URL</label>
-                        <input class="form-control" type="text" name="route_url" id="route_url" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="route_notes" class="form-label">Бележки</label>
-                        <textarea class="form-control" type="text" name="route_notes" id="route_notes"
-                                  rows="3"></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="route_difficulty" class="form-label">Трудност</label>
-                        <input class="form-control" type="number" min="1" max="10" name="route_difficulty"
-                               id="route_difficulty" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="route_length" class="form-label">Дължина (км)</label>
-                        <input class="form-control" type="number" step="0.01" min="1" name="route_length"
-                               id="route_length" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="route_ascent" class="form-label">Денивелация (м)</label>
-                        <input class="form-control" type="number" min="1" name="route_ascent"
-                               id="route_ascent" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <input class="form-check-input" type="checkbox" name="route_is_race"
-                               id="route_is_race">
-                        <label for="route_is_race" class="form-label">Състезатлно трасе?</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <input class="form-check-input" type="checkbox" name="route_notification"
-                               id="route_notification">
-                        <label for="route_notification" class="form-label">Изпрати нотификация?</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="route_notification"
+                                   id="route_notification">
+                            <label for="route_notification" class="form-label">Изпрати email нотификация?</label>
+                        </div>
                     </div>
 
                     <button class="btn btn-info " id="upload-media-btn">Добави</button>
