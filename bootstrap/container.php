@@ -24,7 +24,7 @@ return function (array $settings) {
     $builder->addDefinitions(
         [
             LoggerInterface::class => DI\create(FileLogger::class)->constructor(
-                dirname(__DIR__) . '/var/log/application.log'
+                dirname(__DIR__) . '/var/log/7fbd95b080fce50b0b0332c4da6cb39b.log'
             ),
 
             'logger.for.visits' => DI\create(FileLogger::class)->constructor(
