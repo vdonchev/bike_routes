@@ -11,4 +11,3 @@
 /public/map/*.png
 /public/media/*
 !/public/media/.gitkeep
-deploy.php
