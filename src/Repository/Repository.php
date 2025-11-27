@@ -180,7 +180,7 @@ class Repository
         string $note = null,
         string $strava = null,
         bool $race = false
-    ) {
+    ): bool|string {
         $this->db->insert('route', [
             'name' => $name,
             'map' => $map,
@@ -194,6 +194,6 @@ class Repository
             'is_race' => $race,
         ]);
 
-        return $this->db->insert_id;
+        return $this->db->insertId();
     }
 }
