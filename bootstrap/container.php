@@ -15,7 +15,7 @@ use Twig\Extension\DebugExtension;
 return function (array $settings) {
     $builder = new ContainerBuilder();
 
-    $builder->useAnnotations(true);
+    $builder->useAttributes(true);
 
     if ($settings['app.env'] === 'prod') {
         $builder->enableCompilation(__DIR__ . '/../var/cache/container');
@@ -54,25 +54,21 @@ return function (array $settings) {
             }),
 
             Mailer::class => DI\factory(function (Container $container) {
+                $settings = $container->get('app.settings');
                 return new SmtpMailer(
-                    [
-                        'host' => $container->get('app.settings')['mail.host'],
-                        'username' => $container->get('app.settings')['mail.username'],
-                        'password' => $container->get('app.settings')['mail.password'],
-                        'secure' => $container->get('app.settings')['mail.secure'],
-                        'port' => $container->get('app.settings')['mail.port']
-                    ]
+                    $settings['mail.host'],
+                    $settings['mail.username'],
+                    $settings['mail.password'],
+                    (int)$settings['mail.port'],
+                    $settings['mail.secure'] ?: null,
                 );
             }),
 
             MeekroDB::class => DI\factory(function (Container $container) {
                 return new MeekroDB(
-                    $container->get('app.settings')['db.host'],
+                    "mysql:host={$container->get('app.settings')['db.host']};dbname={$container->get('app.settings')['db.name']}",
                     $container->get('app.settings')['db.username'],
-                    $container->get('app.settings')['db.password'],
-                    $container->get('app.settings')['db.name'],
-                    $container->get('app.settings')['db.port'],
-                    $container->get('app.settings')['db.encoding']
+                    $container->get('app.settings')['db.password']
                 );
             }),
 

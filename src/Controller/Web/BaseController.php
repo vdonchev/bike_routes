@@ -2,10 +2,11 @@
 
 namespace Donchev\Framework\Controller\Web;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
+use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -14,16 +15,10 @@ use Twig\Error\SyntaxError;
 
 abstract class BaseController
 {
-    /**
-     * @Inject()
-     * @var Container
-     */
-    private $container;
+    #[Inject]
+    private ?Container $container = null;
 
-    /**
-     * @var Environment|null
-     */
-    private $template;
+    private ?Environment $template = null;
 
     /**
      * @param string $templateName
@@ -34,9 +29,23 @@ abstract class BaseController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function renderTemplate(string $templateName, array $parameters = [])
+    public function renderTemplate(string $templateName, array $parameters = []): void
     {
         echo $this->getTemplate()->render($templateName, $parameters);
+    }
+
+    /**
+     * @return Environment
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function getTemplate(): Environment
+    {
+        if (!$this->template) {
+            $this->template = $this->container->get(Environment::class);
+        }
+
+        return $this->template;
     }
 
     /**
@@ -69,30 +78,21 @@ abstract class BaseController
     }
 
     /**
-     * @return Environment
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function getTemplate(): Environment
-    {
-        if (!$this->template) {
-            $this->template = $this->container->get(Environment::class);
-        }
-
-        return $this->template;
-    }
-
-    /**
      * @param string $url
      * @return void
      */
-    public function redirect(string $url)
+    #[NoReturn]
+    public function redirect(string $url): void
     {
-        header("Location: {$url}");
+        header("Location: $url");
         exit();
     }
 
-    public function logVisit()
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function logVisit(): void
     {
         $logger = $this->container->get('logger.for.visits');
         $logger->info($_SERVER['REMOTE_ADDR'] . ' => ' . $_SERVER['REQUEST_URI']);

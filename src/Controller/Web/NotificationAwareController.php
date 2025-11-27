@@ -2,18 +2,15 @@
 
 namespace Donchev\Framework\Controller\Web;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use Donchev\Framework\Service\SiteNotificationService;
 
 abstract class NotificationAwareController extends AuthenticationAwareController
 {
-    /**
-     * @Inject()
-     * @var SiteNotificationService
-     */
-    private $notificationService;
+    #[Inject]
+    private ?SiteNotificationService $notificationService = null;
 
-    public function renderTemplate(string $templateName, array $parameters = [])
+    public function renderTemplate(string $templateName, array $parameters = []): void
     {
         $notifications = $this->notificationService->getNotifications();
 

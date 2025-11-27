@@ -7,61 +7,38 @@ use DI\NotFoundException;
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Security\Authenticator;
 use Exception;
+use JetBrains\PhpStorm\NoReturn;
+use MeekroDBException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 class SecurityController extends NotificationAwareController
 {
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
 
-    /**
-     * @param Authenticator $authenticator
-     */
+    private ?Authenticator $authenticator = null;
+
     public function __construct(Authenticator $authenticator)
     {
         $this->authenticator = $authenticator;
-    }
-
-    /**
-     * @return void
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function login()
-    {
-        $this->logVisit();
-
-        if ($this->currentUserExists()) {
-            $this->redirect('/');
-        }
-
-        $this->renderTemplate('security/login.html.twig');
+        parent::__construct($authenticator);
     }
 
     /**
      * @return void
      * @throws Exception
      */
-    public function doLogin()
+    #[NoReturn]
+    public function doLogin(): void
     {
         if ($this->currentUserExists()) {
             $this->redirect('/');
         }
 
         if (
-            isset($_POST['username'], $_POST['password'])
-            && !empty($_POST['username']) && !empty($_POST['password'])
+            !empty($_POST['username']) && !empty($_POST['password'])
         ) {
-
-
-            $remember = isset($_POST['remember']) && !empty($_POST['remember']);
+            $remember = !empty($_POST['remember']);
 
             if ($this->authenticator->login($_POST['username'], $_POST['password'], $remember)) {
                 $this->getNotificationService()->addSuccess('Хей! Успешен вход!');
@@ -74,11 +51,43 @@ class SecurityController extends NotificationAwareController
     }
 
     /**
-     * @return void
+     * @return User|null
      */
-    public function logout()
+    private
+    function currentUserExists(): ?User
+    {
+        return $this->authenticator->getCurrentUser();
+    }
+
+    /**
+     * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function login(): void
     {
         $this->logVisit();
+
+        if ($this->currentUserExists()) {
+            $this->redirect('/');
+        }
+
+        $this->renderTemplate('security/login.html.twig');
+    }
+
+    /**
+     * @return void
+     */
+    #[NoReturn]
+    public function logout(): void
+    {
+        try {
+            $this->logVisit();
+        } catch (DependencyException|NotFoundException $e) {
+        }
 
         $this->authenticator->logout();
 
@@ -95,7 +104,7 @@ class SecurityController extends NotificationAwareController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function profile()
+    public function profile(): void
     {
         $this->logVisit();
 
@@ -114,7 +123,7 @@ class SecurityController extends NotificationAwareController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function password()
+    public function password(): void
     {
         if (!$user = $this->currentUserExists()) {
             $this->redirect('/');
@@ -125,33 +134,28 @@ class SecurityController extends NotificationAwareController
 
     /**
      * @return void
+     * @throws MeekroDBException
      */
-    public function passwordUpdate()
+    #[NoReturn]
+    public function passwordUpdate(): void
     {
         if (!$user = $this->currentUserExists()) {
             $this->redirect('/');
         }
 
         if (
-            isset($_POST['current-password'], $_POST['new-password'], $_POST['new-password-repeat'])
-            && !empty($_POST['current-password']) && !empty($_POST['new-password']) && !empty($_POST['new-password-repeat'])
+            !empty($_POST['current-password']) && !empty($_POST['new-password']) && !empty($_POST['new-password-repeat'])
         ) {
             if ($this->authenticator->passwordUpdate(
-                $_POST['current-password'], $_POST['new-password'], $_POST['new-password-repeat'], $user
+                $_POST['current-password'],
+                $_POST['new-password'],
+                $_POST['new-password-repeat'],
+                $user
             )) {
                 $this->redirect('/profile');
             }
         }
 
         $this->redirect('/password');
-    }
-
-    /**
-     * @return User|null
-     */
-    private
-    function currentUserExists(): ?User
-    {
-        return $this->authenticator->getCurrentUser();
     }
 }

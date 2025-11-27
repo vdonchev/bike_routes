@@ -8,6 +8,7 @@ use DI\NotFoundException;
 use Donchev\Framework\Model\User;
 use Donchev\Framework\Repository\Repository;
 use Exception;
+use MeekroDBException;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -18,17 +19,17 @@ class UserNotificationService
     /**
      * @var Repository
      */
-    private $repository;
+    private Repository $repository;
 
     /**
      * @var EmailService
      */
-    private $emailService;
+    private EmailService $emailService;
 
     /**
      * @var Container
      */
-    private $container;
+    private Container $container;
 
     public function __construct(Repository $repository, EmailService $emailService, Container $container)
     {
@@ -48,10 +49,9 @@ class UserNotificationService
      * @throws SyntaxError
      * @throws Exception
      */
-    public function newMediaNotification(User $user, int $routeId)
+    public function newMediaNotification(User $user, int $routeId): void
     {
         if ($subscribers = $this->repository->getAllSubscribersButCurrentUser($user->getId())) {
-
             $twig = $this->container->get(Environment::class);
 
             $siteUrl = $this->container->get('app.settings')['site.url'];
@@ -60,7 +60,6 @@ class UserNotificationService
             $route = $this->repository->getRoutePerId($routeId);
 
             foreach ($subscribers as $subscriber) {
-
                 $html = $twig->render('notification/media.html.twig', [
                     'receiver' => $subscriber['name'],
                     'sender' => $user,
@@ -80,10 +79,17 @@ class UserNotificationService
         }
     }
 
-    public function newRouteNotification(User $user, int $routeId)
+    /**
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws DependencyException
+     * @throws SyntaxError
+     * @throws MeekroDBException
+     * @throws NotFoundException
+     */
+    public function newRouteNotification(User $user, int $routeId): void
     {
         if ($subscribers = $this->repository->getAllSubscribersButCurrentUser($user->getId())) {
-
             $twig = $this->container->get(Environment::class);
 
             $siteUrl = $this->container->get('app.settings')['site.url'];
@@ -92,7 +98,6 @@ class UserNotificationService
             $route = $this->repository->getRoutePerId($routeId);
 
             foreach ($subscribers as $subscriber) {
-
                 $html = $twig->render('notification/route.html.twig', [
                     'receiver' => $subscriber['name'],
                     'sender' => $user,

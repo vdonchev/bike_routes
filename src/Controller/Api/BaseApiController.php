@@ -2,8 +2,11 @@
 
 namespace Donchev\Framework\Controller\Api;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Donchev\Framework\Controller\Web\BaseController;
 use Donchev\Framework\Exception\AppException;
+use JetBrains\PhpStorm\NoReturn;
 
 abstract class BaseApiController extends BaseController
 {
@@ -15,20 +18,20 @@ abstract class BaseApiController extends BaseController
         $auth_user = $_SERVER['PHP_AUTH_USER'] ?? '';
         $auth_pass = $_SERVER['PHP_AUTH_PW'] ?? '';
 
-        if (!$this->validateAuthentication($auth_user, $auth_pass)) {
-            throw new AppException('Authentication failed.');
+        try {
+            if (!$this->validateAuthentication($auth_user, $auth_pass)) {
+                throw new AppException('Authentication failed.');
+            }
+        } catch (DependencyException|NotFoundException|AppException $e) {
         }
 
         return $this->getPayload();
     }
 
-    public function sendJsonResponse($payload)
-    {
-        header('Content-Type: application/json');
-        echo json_encode($payload);
-        die;
-    }
-
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     private function validateAuthentication(string $user, string $pass): bool
     {
         return hash_equals($this->getContainer()->get('app.settings')['api.username'], $user) &&
@@ -42,10 +45,18 @@ abstract class BaseApiController extends BaseController
     {
         $payload = file_get_contents('php://input');
 
-        if (!$data = json_decode($payload ?? '', true)) {
+        if (!$data = json_decode($payload, true)) {
             throw new AppException('Invalid payload.');
         }
 
         return $data;
+    }
+
+    #[NoReturn]
+    public function sendJsonResponse($payload): void
+    {
+        header('Content-Type: application/json');
+        echo json_encode($payload);
+        die;
     }
 }

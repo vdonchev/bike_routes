@@ -3,6 +3,8 @@
 namespace Donchev\Framework\Service;
 
 use DI\Container;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Nette\Mail\Mailer;
 use Nette\Mail\Message;
 
@@ -11,11 +13,11 @@ class EmailService
     /**
      * @var Mailer
      */
-    private $mailer;
+    private Mailer $mailer;
     /**
      * @var Container
      */
-    private $container;
+    private Container $container;
 
     public function __construct(Mailer $mailer, Container $container)
     {
@@ -23,13 +25,17 @@ class EmailService
         $this->container = $container;
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     public function sendHtmlMail(
         string $subject,
         string $html,
         string $to,
         string $fromName = null,
         string $fromEmail = null
-    ) {
+    ): void {
         $message = new Message();
 
         if (empty($fromEmail) || empty($fromName)) {

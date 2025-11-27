@@ -6,43 +6,43 @@ use DateInterval;
 use DateTime;
 use Donchev\Framework\Model\Route;
 use MeekroDB;
+use MeekroDBException;
 
 class Repository
 {
-    /**
-     * @var MeekroDB
-     */
-    private $db;
+    private ?MeekroDB $db = null;
 
-    /**
-     * @param MeekroDB $db
-     */
     public function __construct(MeekroDB $db)
     {
         $this->db = $db;
     }
 
     /**
-     * @return array|null
+     * @throws MeekroDBException
      */
     public function getAllRoutes(): array
     {
-        $result = $this->db->queryRaw('SELECT * FROM route r ORDER BY r.id DESC');
+        $pdo = $this->db->get();
+        $result = $pdo->query('SELECT * FROM route r ORDER BY r.id DESC');
 
         $all = [];
-        while ($staff = $result->fetch_object(Route::class)) {
+        while ($staff = $result->fetchObject(Route::class)) {
             $all[] = $staff;
         }
 
         return $all;
     }
 
+    /**
+     * @throws MeekroDBException
+     */
     public function getAllRaceRoutes(): array
     {
-        $result = $this->db->queryRaw('SELECT * FROM route r WHERE r.is_race = 1 ORDER BY r.id DESC');
+        $pdo = $this->db->get();
+        $result = $pdo->query('SELECT * FROM route r WHERE r.is_race = 1 ORDER BY r.id DESC');
 
         $all = [];
-        while ($staff = $result->fetch_object(Route::class)) {
+        while ($staff = $result->fetchObject(Route::class)) {
             $all[] = $staff;
         }
 
@@ -51,40 +51,40 @@ class Repository
 
     /**
      * @param int $id
-     * @return array|null
+     * @return Route|null
+     * @throws MeekroDBException
      */
     public function getRoutePerId(int $id): ?Route
     {
-        $result = $this->db->queryRaw('SELECT * FROM route r WHERE r.id = %i', $id);
+        $pdo = $this->db->get();
+        $stmt = $pdo->prepare('SELECT * FROM route r WHERE r.id = :id');
+        $stmt->execute(['id' => $id]);
 
-        return $result->fetch_object(Route::class);
+        $obj = $stmt->fetchObject(Route::class);
+        return $obj instanceof Route ? $obj : null;
     }
 
+    /**
+     * @throws MeekroDBException
+     */
     public function getAllLatestRoutes(int $count = 3): array
     {
-        $result = $this->db->queryRaw("SELECT * FROM route r ORDER BY r.created_at DESC LIMIT {$count}");
+        $pdo = $this->db->get();
+        $result = $pdo->query("SELECT * FROM route r ORDER BY r.created_at DESC LIMIT $count");
 
         $all = [];
-        while ($staff = $result->fetch_object(Route::class)) {
+        while ($staff = $result->fetchObject(Route::class)) {
             $all[] = $staff;
         }
 
         return $all;
     }
 
-    /**
-     * @param string $username
-     * @return array|null
-     */
     public function getUserPerUsername(string $username): ?array
     {
         return $this->db->queryFirstRow('SELECT * FROM user u WHERE u.username = %s', $username);
     }
 
-    /**
-     * @param int $userId
-     * @return array|null
-     */
     public function getUserPerId(int $userId): ?array
     {
         return $this->db->queryFirstRow('SELECT * FROM user u WHERE u.id = %i', $userId);
@@ -101,16 +101,14 @@ class Repository
     }
 
     /**
-     * @param int $userId
-     * @param string $newPasswordHash
-     * @return void
+     * @throws MeekroDBException
      */
-    public function updateUserPassword(int $userId, string $newPasswordHash)
+    public function updateUserPassword(int $userId, string $newPasswordHash): void
     {
         $this->db->update('user', ['password' => $newPasswordHash], 'id=%i', $userId);
     }
 
-    public function addMedia(string $file, int $userId, int $routeId)
+    public function addMedia(string $file, int $userId, int $routeId): void
     {
         $this->db->insert('media', [
             'file' => $file,
@@ -123,7 +121,8 @@ class Repository
     {
         return $this->db->query(
             'SELECT m.*, u.name FROM media m JOIN user u ON m.user_id = u.id WHERE m.route_id = %i ORDER BY m.created_at DESC'
-            , $routeId
+            ,
+            $routeId
         );
     }
 
@@ -131,7 +130,8 @@ class Repository
     {
         return $this->db->queryFirstRow(
             'SELECT * FROM media m WHERE m.id = %i'
-            , $mediaId
+            ,
+            $mediaId
         );
     }
 
@@ -142,16 +142,20 @@ class Repository
 
     public function getAllSubscribers(): ?array
     {
-        return $this->db->query('SELECT u.email, u.name FROM subscriber s JOIN user u on s.user_id = u.id WHERE s.is_subscribed = 1');
+        return $this->db->query(
+            'SELECT u.email, u.name FROM subscriber s JOIN user u on s.user_id = u.id WHERE s.is_subscribed = 1'
+        );
     }
 
     public function getAllSubscribersButCurrentUser(int $currentUserId): ?array
     {
-        return $this->db->query('SELECT u.email, u.name FROM subscriber s JOIN user u on s.user_id = u.id WHERE s.is_subscribed = 1 AND u.id != %i',
-            $currentUserId);
+        return $this->db->query(
+            'SELECT u.email, u.name FROM subscriber s JOIN user u on s.user_id = u.id WHERE s.is_subscribed = 1 AND u.id != %i',
+            $currentUserId
+        );
     }
 
-    public function storeToken(string $token, int $userId)
+    public function storeToken(string $token, int $userId): void
     {
         $this->db->insert('token', [
             'token' => $token,

@@ -8,10 +8,7 @@ use Exception;
 
 abstract class AuthenticationAwareController extends BaseController
 {
-    /**
-     * @var Authenticator
-     */
-    private $authenticator;
+    private ?Authenticator $authenticator = null;
 
     /**
      * @throws Exception

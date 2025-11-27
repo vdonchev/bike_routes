@@ -3,54 +3,55 @@
 namespace Donchev\Framework\Model;
 
 use DateTime;
+use Exception;
 
 class Route
 {
     /** @var int */
-    public $id;
+    public int $id;
 
     /** @var string */
-    public $name;
+    public string $name;
 
     /** @var string|null */
-    public $map;
+    public ?string $map;
 
     /** @var string */
-    public $gpx_url;
+    public string $gpx_url;
 
-    /** @var string */
-    public $strava_url;
-
-    /** @var string|null */
-    public $gpx_file;
+    /** @var ?string */
+    public ?string $strava_url;
 
     /** @var string|null */
-    public $note;
+    public ?string $gpx_file;
+
+    /** @var string|null */
+    public ?string $note;
 
     /** @var int */
-    public $difficulty;
+    public int $difficulty;
 
     /** @var double */
-    public $length;
+    public float $length;
 
     /** @var int */
-    public $ascent;
+    public int $ascent;
 
     /** @var int */
-    public $is_race;
+    public int $is_race;
 
-    /** @var DateTime */
-    public $created_at;
+    /** @var string */
+    public string $created_at;
 
-    /** @var DateTime */
-    public $updated_at;
+    /** @var string */
+    public string $updated_at;
 
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
@@ -60,7 +61,7 @@ class Route
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -70,7 +71,7 @@ class Route
         return $this->map;
     }
 
-    public function setMapUrl(?string $map)
+    public function setMapUrl(?string $map): void
     {
         $this->map = $map;
     }
@@ -80,7 +81,7 @@ class Route
         return $this->gpx_url;
     }
 
-    public function setGpxUrl(string $gpx_url)
+    public function setGpxUrl(string $gpx_url): void
     {
         $this->gpx_url = $gpx_url;
     }
@@ -90,7 +91,7 @@ class Route
         return $this->strava_url;
     }
 
-    public function setStravaUrl(?string $strava_url)
+    public function setStravaUrl(?string $strava_url): void
     {
         $this->strava_url = $strava_url;
     }
@@ -100,7 +101,7 @@ class Route
         return $this->gpx_file;
     }
 
-    public function setGpxFileName(?string $gpx_file)
+    public function setGpxFileName(?string $gpx_file): void
     {
         $this->gpx_file = $gpx_file;
     }
@@ -110,7 +111,7 @@ class Route
         return $this->note;
     }
 
-    public function setNote(?string $note)
+    public function setNote(?string $note): void
     {
         $this->note = $note;
     }
@@ -120,7 +121,7 @@ class Route
         return $this->difficulty;
     }
 
-    public function setDifficulty(int $difficulty)
+    public function setDifficulty(int $difficulty): void
     {
         $this->difficulty = $difficulty;
     }
@@ -130,7 +131,7 @@ class Route
         return $this->length;
     }
 
-    public function setLength(float $length)
+    public function setLength(float $length): void
     {
         $this->length = $length;
     }
@@ -140,7 +141,7 @@ class Route
         return $this->ascent;
     }
 
-    public function setAscent(int $ascent)
+    public function setAscent(int $ascent): void
     {
         $this->ascent = $ascent;
     }
@@ -150,31 +151,40 @@ class Route
         return $this->is_race;
     }
 
-    public function setIsRace(int $is_race)
+    public function setIsRace(int $is_race): void
     {
         $this->is_race = $is_race;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getCreatedAt(): DateTime
     {
         return new DateTime($this->created_at);
     }
 
-    public function setCreatedAt(DateTime $created_at)
+    public function setCreatedAt(DateTime $created_at): void
     {
         $this->created_at = $created_at;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getUpdatedAt(): DateTime
     {
         return new DateTime($this->updated_at);
     }
 
-    public function setUpdatedAt(DateTime $updated_at)
+    public function setUpdatedAt(DateTime $updated_at): void
     {
         $this->updated_at = $updated_at;
     }
 
+    /**
+     * @throws Exception
+     */
     public function isNew(): bool
     {
         return $this->getCreatedAt() > date_create('7 days ago');
@@ -183,27 +193,12 @@ class Route
     public function getDifficultyClass(): string
     {
         $bg = 'bg-';
-        switch ($this->getDifficulty()) {
-            case 1:
-            case 2:
-            case 3:
-                return $bg . 'success';
-
-            case 4:
-            case 5:
-                return $bg . 'info';
-
-            case 6:
-            case 7:
-            case 8:
-                return $bg . 'warning';
-
-            case 9:
-            case 10:
-                return $bg . 'danger';
-
-            default:
-                return '';
-        }
+        return match ($this->getDifficulty()) {
+            1, 2, 3 => $bg . 'success',
+            4, 5 => $bg . 'info',
+            6, 7, 8 => $bg . 'warning',
+            9, 10 => $bg . 'danger',
+            default => '',
+        };
     }
 }

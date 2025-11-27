@@ -15,4 +15,7 @@ $application = new Application();
 
 $application->add(new CacheClearCommand($container));
 
-$application->run();
+try {
+    $application->run();
+} catch (Exception $e) {
+}

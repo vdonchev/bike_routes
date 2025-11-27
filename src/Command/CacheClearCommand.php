@@ -2,7 +2,6 @@
 
 namespace Donchev\Framework\Command;
 
-use DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,15 +10,9 @@ class CacheClearCommand extends Command
 {
     protected static $defaultName = 'cache:clear';
 
-    /**
-     * @var Container
-     */
-    private $container;
-
-    public function __construct(Container $container, string $name = null)
+    public function __construct(string $name = null)
     {
         parent::__construct($name);
-        $this->container = $container;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -33,7 +26,7 @@ class CacheClearCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function delete(string $dir, string $rootDir)
+    private function delete(string $dir, string $rootDir): void
     {
         foreach (glob($dir . '/*') as $file) {
             if (is_dir($file)) {

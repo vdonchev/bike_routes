@@ -7,21 +7,17 @@ use Donchev\Framework\Model\User;
 use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Service\SiteNotificationService;
 use Exception;
+use MeekroDBException;
 
 class Authenticator
 {
-    /**
-     * @var Repository
-     */
-    private $repository;
+    private ?Repository $repository = null;
 
-    /**
-     * @var SiteNotificationService
-     */
-    private $notificationService;
+    private ?SiteNotificationService $notificationService = null;
 
     /**
      * @param Repository $repository
+     * @param SiteNotificationService $notificationService
      */
     public function __construct(Repository $repository, SiteNotificationService $notificationService)
     {
@@ -40,58 +36,60 @@ class Authenticator
         $dbUser = $this->repository->getUserPerUsername($username);
 
         if ($dbUser) {
-
             if (password_verify($plainPassword, $dbUser['password'])) {
                 $this->performLogin($dbUser, $remember);
 
                 return true;
             }
-
         }
 
         return false;
     }
 
     /**
+     * @param string $data
+     * @return string
+     */
+    private function sanitize(string $data): string
+    {
+        return trim($data);
+    }
+
+    /**
+     * @param array $dbUser
+     * @param bool $remember
      * @return void
+     * @throws Exception
      */
-    public function logout()
+    private function performLogin(array $dbUser, bool $remember = false): void
     {
-        $currentUser = $this->getCurrentUser();
+        $user = new User($dbUser);
 
-        /** delete remember me tokens */
-        if (isset($_COOKIE['remember_me']) && !empty($_COOKIE['remember_me'])) {
-            $token = trim($_COOKIE['remember_me']);
-            $this->repository->removeTokenPerUser($currentUser->getId(), $token);
+        $_SESSION['user'] = serialize($user);
+
+        if ($remember) {
+            $token = $this->generateToken();
+
+            $this->repository->storeToken($token, $user->getId());
+            $this->setRememberCookie($token);
         }
-
-        /** delete remember me cookie */
-        setcookie('remember_me', '', 1);
-
-        /** delete session */
-        session_unset();
-
-        session_regenerate_id(true);
     }
 
     /**
-     * @return User|null
+     * @throws Exception
      */
-    public function getCurrentUser(): ?User
+    private function generateToken(): string
     {
-        if (isset($_SESSION)) {
-            return isset($_SESSION['user']) ? unserialize($_SESSION['user']) : null;
-        }
+        return bin2hex(random_bytes(32));
+    }
 
-        return null;
+    private function setRememberCookie(string $token): void
+    {
+        setcookie('remember_me', $token, time() + 60 * 60 * 24 * 90);
     }
 
     /**
-     * @param string $currentPassword
-     * @param string $newPassword
-     * @param string $newPasswordRepeat
-     * @param User $user
-     * @return bool
+     * @throws MeekroDBException
      */
     public function passwordUpdate(
         string $currentPassword,
@@ -127,12 +125,37 @@ class Authenticator
     }
 
     /**
-     * @param string $data
-     * @return string
+     * @return void
      */
-    private function sanitize(string $data): string
+    public function logout(): void
     {
-        return trim($data);
+        $currentUser = $this->getCurrentUser();
+
+        /** delete remember me tokens */
+        if (!empty($_COOKIE['remember_me'])) {
+            $token = trim($_COOKIE['remember_me']);
+            $this->repository->removeTokenPerUser($currentUser->getId(), $token);
+        }
+
+        /** delete remember me cookie */
+        setcookie('remember_me', '', 1);
+
+        /** delete session */
+        session_unset();
+
+        session_regenerate_id(true);
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getCurrentUser(): ?User
+    {
+        if (isset($_SESSION)) {
+            return isset($_SESSION['user']) ? unserialize($_SESSION['user']) : null;
+        }
+
+        return null;
     }
 
     public function isAdmin(): bool
@@ -147,13 +170,13 @@ class Authenticator
     /**
      * @throws Exception
      */
-    public function isUserRemembered()
+    public function isUserRemembered(): void
     {
         if ($this->getCurrentUser()) {
             return;
         }
 
-        if (isset($_COOKIE['remember_me']) && !empty($_COOKIE['remember_me'])) {
+        if (!empty($_COOKIE['remember_me'])) {
             $token = trim($_COOKIE['remember_me']);
 
             if ($dbToken = $this->repository->getToken($token)) {
@@ -166,38 +189,5 @@ class Authenticator
                 }
             }
         }
-    }
-
-    /**
-     * @param array $dbUser
-     * @param bool $remember
-     * @return void
-     * @throws Exception
-     */
-    private function performLogin(array $dbUser, bool $remember = false)
-    {
-        $user = new User($dbUser);
-
-        $_SESSION['user'] = serialize($user);
-
-        if ($remember) {
-            $token = $this->generateToken();
-
-            $this->repository->storeToken($token, $user->getId());
-            $this->setRememberCookie($token);
-        }
-    }
-
-    private function setRememberCookie(string $token)
-    {
-        setcookie('remember_me', $token, time() + 60 * 60 * 24 * 90);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function generateToken(): string
-    {
-        return bin2hex(random_bytes(32));
     }
 }

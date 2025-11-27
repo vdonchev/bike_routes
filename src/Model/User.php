@@ -3,29 +3,30 @@
 namespace Donchev\Framework\Model;
 
 use DateTime;
+use Exception;
 
 class User
 {
     /** @var int */
-    private $id;
+    private mixed $id;
 
     /** @var string */
-    private $username;
+    private mixed $username;
 
     /** @var string */
-    private $passwordHash;
+    private mixed $passwordHash;
 
     /** @var string */
-    private $name;
+    private mixed $name;
 
     /** @var DateTime */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /** @var DateTime */
-    private $updatedAt;
+    private DateTime $updatedAt;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(array $data)
     {
@@ -37,22 +38,12 @@ class User
         $this->updatedAt = new DateTime($data['updated_at']);
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id)
-    {
-        $this->id = $id;
-    }
-
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function setUsername(string $username)
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }
@@ -62,7 +53,7 @@ class User
         return $this->passwordHash;
     }
 
-    public function setPasswordHash(string $passwordHash)
+    public function setPasswordHash(string $passwordHash): void
     {
         $this->passwordHash = $passwordHash;
     }
@@ -72,7 +63,7 @@ class User
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -82,7 +73,7 @@ class User
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -92,7 +83,7 @@ class User
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -100,5 +91,15 @@ class User
     public function isAdmin(): bool
     {
         return $this->getId() === 1;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 }

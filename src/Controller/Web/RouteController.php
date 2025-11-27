@@ -10,6 +10,8 @@ use Donchev\Framework\Service\MediaService;
 use Donchev\Framework\Service\SiteNotificationService;
 use Donchev\Framework\Service\UserNotificationService;
 use Exception;
+use JetBrains\PhpStorm\NoReturn;
+use MeekroDBException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -32,7 +34,7 @@ class RouteController extends NotificationAwareController
         int $id,
         Repository $repository,
         Authenticator $authenticator
-    ) {
+    ): void {
         $this->logVisit();
 
         if (!$route = $repository->getRoutePerId($id)) {
@@ -42,8 +44,10 @@ class RouteController extends NotificationAwareController
         $user = $authenticator->getCurrentUser();
         $media = $repository->getMediaPerRouteId($route->getId());
 
-        $this->renderTemplate('/route/route.html.twig',
-            ['route' => $route, 'user' => $user, 'media' => $media]);
+        $this->renderTemplate(
+            '/route/route.html.twig',
+            ['route' => $route, 'user' => $user, 'media' => $media]
+        );
     }
 
     /**
@@ -55,7 +59,7 @@ class RouteController extends NotificationAwareController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function add(Authenticator $authenticator)
+    public function add(Authenticator $authenticator): void
     {
         $this->logVisit();
 
@@ -68,13 +72,18 @@ class RouteController extends NotificationAwareController
         $this->renderTemplate('/route/add.html.twig', ['user' => $user]);
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    #[NoReturn]
     public function addSubmit(
         MediaService $mediaService,
         Repository $repository,
         SiteNotificationService $notificationService,
         UserNotificationService $userNotificationService,
         Authenticator $authenticator
-    ) {
+    ): void {
         if (isset(
             $_POST['route_name'],
             $_POST['route_url'],
@@ -101,21 +110,40 @@ class RouteController extends NotificationAwareController
             $isRace = isset($_POST['route_is_race']);
 
             $mapUpload = $mediaService->uploadFile(
-                $map, $this->getContainer()->get('app.settings')['media.map.path'], null, true
+                $map,
+                $this->getContainer()->get('app.settings')['media.map.path'],
+                null,
+                true
             );
 
             $gpxUpload = $mediaService->uploadFile(
-                $gpx, $this->getContainer()->get('app.settings')['media.gpx.path'], null, true, 'gpx'
+                $gpx,
+                $this->getContainer()->get('app.settings')['media.gpx.path'],
+                null,
+                true,
+                'gpx'
             );
 
             if ($mapUpload && $gpxUpload) {
                 if ($routeId = $repository->addRoute(
-                    $name, $mapUpload, $gpxUpload, $url, $difficulty, $length, $ascent, $note, $strava_url, $isRace
+                    $name,
+                    $mapUpload,
+                    $gpxUpload,
+                    $url,
+                    $difficulty,
+                    $length,
+                    $ascent,
+                    $note,
+                    $strava_url,
+                    $isRace
                 )) {
                     $notificationService->addSuccess('Трасето е качено успешно!');
 
                     if (isset($_POST['route_notification'])) {
-                        $userNotificationService->newRouteNotification($user, $routeId);
+                        try {
+                            $userNotificationService->newRouteNotification($user, $routeId);
+                        } catch (DependencyException|NotFoundException|MeekroDBException|LoaderError|RuntimeError|SyntaxError $e) {
+                        }
                     }
                 }
             }

@@ -5,18 +5,30 @@ namespace Donchev\Framework\Controller\Web;
 use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
-use diversen\sendfile;
+use Diversen\Sendfile;
 use Donchev\Framework\Repository\Repository;
 use Donchev\Framework\Security\Authenticator;
 use Donchev\Framework\Service\MediaService;
 use Exception;
+use JetBrains\PhpStorm\NoReturn;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class MediaController extends NotificationAwareController
 {
+    /**
+     * @throws SyntaxError
+     * @throws NotFoundException
+     * @throws RuntimeError
+     * @throws DependencyException
+     * @throws LoaderError
+     */
+    #[NoReturn]
     public function uploadImage(
         MediaService $uploadService,
         Authenticator $authenticator
-    ) {
+    ): void {
         $this->logVisit();
 
         if (!$user = $authenticator->getCurrentUser()) {
@@ -34,8 +46,17 @@ class MediaController extends NotificationAwareController
         $this->redirect('/route/' . $routeId);
     }
 
-    public function deleteMedia(int $mediaId, int $routeId, Authenticator $authenticator, MediaService $mediaService)
-    {
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    #[NoReturn]
+    public function deleteMedia(
+        int $mediaId,
+        int $routeId,
+        Authenticator $authenticator,
+        MediaService $mediaService
+    ): void {
         $this->logVisit();
 
         if ($mediaService->deleteImage($mediaId, $authenticator->getCurrentUser()->getId())) {
@@ -54,17 +75,21 @@ class MediaController extends NotificationAwareController
      * @throws NotFoundException
      * @throws Exception
      */
-    public function downloadGpx(int $id, Repository $repository, Container $container)
+    #[NoReturn]
+    public function downloadGpx(int $id, Repository $repository, Container $container): void
     {
         $this->logVisit();
 
         $route = $repository->getRoutePerId($id);
 
-        $sf = new sendfile();
-        $sf->contentType('application/gpx+xml');
+        $sf = new Sendfile();
+        $sf->setContentType('application/gpx+xml');
 
-        $file = $container->get('app.settings')['media.gpx.path'] . DIRECTORY_SEPARATOR . $route->getGpxFileName();
+        $file = $container->get('app.settings')['media.gpx.path']
+            . DIRECTORY_SEPARATOR
+            . $route->getGpxFileName();
 
         $sf->send($file);
+        exit;
     }
 }

@@ -17,17 +17,17 @@ class MediaService
     /**
      * @var Repository
      */
-    private $repository;
+    private Repository $repository;
 
     /**
      * @var Container
      */
-    private $container;
+    private Container $container;
 
     /**
      * @var UserNotificationService
      */
-    private $userNotificationService;
+    private UserNotificationService $userNotificationService;
 
     public function __construct(
         Repository $repository,
@@ -88,6 +88,10 @@ class MediaService
         return true;
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     public function deleteImage(int $mediaId, int $authorId): bool
     {
         /** delete file */
@@ -111,10 +115,9 @@ class MediaService
         string $fileName = null,
         bool $randomName = false,
         string $ext = null
-    ) {
+    ): bool|string {
         $handle = new Upload($file);
         if ($handle->uploaded) {
-
             if ($fileName) {
                 $handle->file_new_name_body = $fileName;
             }
