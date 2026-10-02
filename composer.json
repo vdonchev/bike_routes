@@ -15,9 +15,6 @@
     }
   ],
   "config": {
-    "platform": {
-      "php": "8.3"
-    },
     "audit": {
       "ignore": [
         "PKSA-3n81-fgxd-xfh7"
