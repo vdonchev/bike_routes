@@ -1,0 +1,45 @@
+import:
+  - recipe/common.php
+  - recipe/composer.php
+
+config:
+  application: krisi.bike
+  repository: git@github.com:vdonchev/bike_routes.git
+  branch: master
+  keep_releases: 5
+  allow_anonymous_stats: false
+  writable_mode: chmod
+  shared_files:
+    - var/log/application.log
+    - public/7fbd95b080fce50b0b0332c4da6cb39b.log
+    - config/settings.local.yaml
+  shared_dirs:
+    - public/map
+    - public/gpx
+    - public/media
+  writable_dirs: []
+  ssh_multiplexing: true
+  ssh_options:
+    - StrictHostKeyChecking=no
+
+hosts:
+  production:
+    hostname: 151.80.145.236
+    remote_user: ubuntu
+    forward_agent: true
+    deploy_path: /var/www/krisi.bike
+
+tasks:
+  php-fpm:restart:
+    - desc: Restart PHP-FPM
+    - run: sudo systemctl restart php8.5-fpm.service
+  deploy:set_permissions:
+    - desc: Set permissions
+    - run: sudo chown -R www-data:$USER {{release_path}}/var/log
+    - run: sudo chown -R www-data:$USER {{release_path}}/var/cache
+    - run: sudo chown -R www-data:$USER {{release_path}}/public
+
+after:
+  deploy:symlink: deploy:set_permissions
+  deploy:set_permissions: php-fpm:restart
+  deploy:failed: deploy:unlock

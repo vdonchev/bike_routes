@@ -3,21 +3,16 @@
 namespace Donchev\Framework\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'cache:clear')]
 class CacheClearCommand extends Command
 {
-    protected static $defaultName = 'cache:clear';
-
-    public function __construct(string $name = null)
-    {
-        parent::__construct($name);
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $path = dirname(__DIR__, 2) . '/var/cache';
+        $path = dirname(__DIR__, 3) . '/var/cache';
 
         $this->delete($path, $path);
 
