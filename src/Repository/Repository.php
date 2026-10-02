@@ -177,8 +177,8 @@ class Repository
         int $difficulty,
         float $length,
         int $ascent,
-        string $note = null,
-        string $strava = null,
+        ?string $note = null,
+        ?string $strava = null,
         bool $race = false
     ): bool|string {
         $this->db->insert('route', [
